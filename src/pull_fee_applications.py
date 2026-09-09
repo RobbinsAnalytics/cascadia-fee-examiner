@@ -41,15 +41,18 @@ seconds" does not establish an hourly rate.
 The server states its own limits in the body of the 429, which is better
 evidence than any timing experiment:
 
-    unauthenticated   "Rate limit exceeded: 50/hour"
-    authenticated     "Rate limit exceeded: 5/min"
+    unauthenticated              "Rate limit exceeded: 50/hour"
+    authenticated, first 429     "Rate limit exceeded: 5/min"
+    authenticated, hour filled   "Rate limit exceeded: 50/hour.
+                                  Expected available in 1745 seconds."
 
-So authentication is worth six times the hourly throughput -- 300/hour against
-50 -- and the documented 5/min, 50/hour, 125/day figures describe the
-AUTHENTICATED tier, while unauthenticated use is capped an order of magnitude
-lower per hour. Spacing is therefore derived from which credential is in use
-rather than from a constant, and the token is read from the environment and
-never from a file.
+The middle line was misread once as a higher ceiling -- "six times the
+throughput" -- and spacing was set to 12.5s on it. Five requests later the hour
+was full. The 5/min figure is the FINER limit layered on the same 50/hour one,
+so the token smooths bursts and raises nothing. Spacing is 74s on either tier,
+the server's Retry-After is honoured, and the token is read from the
+environment and never from a file. Two burst measurements mistaken for a
+sustained rate in one day is the reason this paragraph is as long as it is.
 
 Downloads come from a different host (storage.courtlistener.com) and are not
 throttled by the API limiter; they keep their own, gentler spacing.
@@ -86,11 +89,19 @@ API = "https://www.courtlistener.com/api/rest/v4/search/"
 STORAGE = "https://storage.courtlistener.com/"
 UA = "cascadia-fee-examiner/1.0 (portfolio research; ajayrobbins@hotmail.com)"
 
-# 5/min authenticated, 50/hour unauthenticated, both quoted by the server.
-# A little over the stated interval in each case, not exactly at it.
-SEARCH_SPACING_AUTH = 12.5      # 4.8/min
+# BOTH tiers are capped at 50/hour, and the server said so in as many words
+# once the hourly window was actually reached with a token:
+#     "Rate limit exceeded: 50/hour. Expected available in 1745 seconds."
+# The 5/min figure quoted to authenticated callers is the FINER limit layered
+# on top of the same hourly one, not a higher ceiling. An earlier version of
+# this file set 12.5s for the token on the strength of the per-minute message
+# alone, ran 5 requests, and backed off for eleven minutes -- the second time in
+# one day that a short measurement was mistaken for a sustained rate. Spacing is
+# therefore the hourly interval for everyone, and the token's only benefit is
+# that bursts inside the hour are smoothed rather than refused.
+SEARCH_SPACING_AUTH = 74.0      # 48.6/hour
 SEARCH_SPACING_ANON = 74.0      # 48.6/hour
-DOWNLOAD_SPACING = 2.0
+DOWNLOAD_SPACING = 2.0          # storage host; not governed by the API limiter
 MAX_BACKOFF = 300.0
 PAGE_SIZE_GUESS = 20
 
@@ -268,12 +279,21 @@ def get(session, url, params, budget, spacing) -> requests.Response | None:
             return None
         resp = session.get(url, params=params, timeout=120)
         if resp.status_code == 429:
-            backoff = min(backoff * 2, MAX_BACKOFF)
-            print(f"      429 -- backing off {backoff:.0f}s")
-            time.sleep(backoff)
-            if backoff >= MAX_BACKOFF:
-                budget.stopped = "sustained rate limiting"
+            # The server states when the window clears. Honour it, up to an
+            # hour, instead of doubling blindly: five blind doublings spent
+            # eleven minutes discovering a 29-minute wait.
+            retry_after = resp.headers.get("Retry-After", "")
+            try:
+                wait = min(float(retry_after), 3600.0) + 5.0
+            except ValueError:
+                backoff = min(backoff * 2, MAX_BACKOFF)
+                wait = backoff
+            body = resp.text[:110].replace("\n", " ")
+            print(f"      429 -- waiting {wait:.0f}s  ({body})")
+            if wait > 1800.0:
+                budget.stopped = f"rate window clears in {wait:.0f}s; stopping rather than idling"
                 return None
+            time.sleep(wait)
             continue
         time.sleep(spacing)
         return resp
@@ -329,7 +349,7 @@ def main() -> int:
     print(f"Credential             : "
           f"{'token from COURTLISTENER_TOKEN' if token else 'none (anonymous)'}")
     print(f"Search spacing         : {spacing}s "
-          f"({'5/min' if token else '50/hour'} as quoted by the server)")
+          f"(50/hour on either tier, as quoted by the server)")
     print("")
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     PDF_DIR.mkdir(parents=True, exist_ok=True)

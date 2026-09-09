@@ -57,7 +57,8 @@ of a frozen 216-case population would mostly re-measure noise.
 
 ## Rate
 
-Unauthenticated, 4-second spacing, exponential backoff, and a hard per-run
+**50 requests per hour on either tier**, quoted by the server itself, so 74-second
+spacing, the server's `Retry-After` honoured on a 429, and a hard per-run
 request ceiling — the measured basis is in `src/pull_fee_applications.py`'s
 header. A scheduled run inherits those and must not be given a larger ceiling
 than an attended one.
