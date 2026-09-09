@@ -30,12 +30,21 @@ WHAT IT REFUSES TO DO
     vocabulary is data/reference/entry_classifier.csv, applied before any
     storage request, and the unclassified rate is published.
 
-RATE
-Documented limits are 5/min, 50/hour, 125/day for authenticated users. This
+RATE, MEASURED RATHER THAN GUESSED
+Documented limits are 5/min, 50/hour, 125/day for AUTHENTICATED users. This
 script runs unauthenticated -- /search/ and the storage PDFs both serve without
-a token -- at a measured-safe spacing, with backoff, and with a hard per-run
-request ceiling so an unattended run cannot become a hammering. Measured on
-2026-09-09: two HTTP 429s in 16 requests at 2.5s spacing; none in 20+ at 8s.
+a token -- so the documented figures do not describe it and the safe spacing had
+to be established by measurement. On 2026-09-09, against one query repeated:
+
+    2.0s spacing   HTTP 429 on the 5th request
+    2.5s spacing   two 429s in 16 requests
+    3.0s spacing   14 requests, 45 seconds, zero 429s
+    8.0s spacing   20+ requests, zero 429s
+
+SEARCH_SPACING is set to 4.0s: a third above the fastest interval measured
+clean, rather than at it. Exponential backoff on any 429 and a hard per-run
+request ceiling are the other two halves -- an unattended run stops and records
+that it stopped rather than becoming a hammering.
 """
 
 from __future__ import annotations
@@ -69,7 +78,7 @@ API = "https://www.courtlistener.com/api/rest/v4/search/"
 STORAGE = "https://storage.courtlistener.com/"
 UA = "cascadia-fee-examiner/1.0 (portfolio research; ajayrobbins@hotmail.com)"
 
-SEARCH_SPACING = 8.0
+SEARCH_SPACING = 4.0
 DOWNLOAD_SPACING = 2.0
 MAX_BACKOFF = 300.0
 PAGE_SIZE_GUESS = 20
@@ -292,8 +301,21 @@ def main() -> int:
             resp = get(session, url, params, budget, SEARCH_SPACING)
             if resp is None:
                 break
-            if resp.status_code != 200:
+            if resp.status_code >= 500:
+                # A transient server error killed the rest of this case's pages
+                # in the first version. One retry, then give up on the case and
+                # record it -- a 502 observed during rate measurement on
+                # 2026-09-09 is why this branch exists.
+                print(f"      HTTP {resp.status_code} -- one retry")
+                time.sleep(SEARCH_SPACING * 2)
+                resp = get(session, url, params, budget, SEARCH_SPACING)
+                if resp is None or resp.status_code != 200:
+                    print(f"      still failing -- case recorded as incomplete")
+                    truncated = True
+                    break
+            elif resp.status_code != 200:
                 print(f"      HTTP {resp.status_code} -- recorded, not retried")
+                truncated = True
                 break
             payload = resp.json()
             total = payload.get("count") if total is None else total
