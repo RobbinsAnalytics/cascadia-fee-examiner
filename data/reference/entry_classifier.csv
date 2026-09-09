@@ -1,6 +1,7 @@
 priority,entry_class,pattern,professional_type_hint,note
 10,application_amended,"(?i)\b(amended|corrected|supplemental|substitute)\b.{0,60}\bfee (application|statement)\b",,"Supersedes an earlier application for the same period. Must be classed before the plain application rule or it is read as an original, and the period is then counted twice."
 11,application_amended,"(?i)\bfee application\b.{0,40}\b(as amended|amendment)\b",,
+15,motion,"(?i)\bmotion\b","","A MOTION FOR ENTRY OF AN ORDER IS NOT AN ORDER. Found on 2026-09-09: ""Debtors' Motion for Entry of an Order Establishing Procedures for Interim Compensation"" was classed as an order by the granting/approving rule below and its PDF was stored and then failed to parse, because a motion about compensation procedures contains no award and no timekeeper table. Ranked above every order rule so the word order inside a motion caption cannot claim it."
 20,order,"(?i)\border\b.{0,80}\b(fee application|application for compensation|compensation and reimbursement)\b",,"The court's own award. THIS IS THE ANSWER KEY for stage 5: it is written by a different author than the application it responds to."
 21,order,"(?i)\b(granting|approving|awarding|denying)\b.{0,60}\b(fee|compensation)\b",,
 30,certification,"(?i)\bcertificat(e|ion) of (no objection|counsel)\b",,"Procedural. Carries no hours and no fees."

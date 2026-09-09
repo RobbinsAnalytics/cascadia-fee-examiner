@@ -151,6 +151,48 @@
         "pattern": "controlled",
         "note": "free_text"
       }
+    },
+    "data/reference/title_to_role.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "role": "controlled",
+        "pattern": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/conformed/coverage_by_case.csv": {
+      "grain": "one row per Appendix B-era case in the spine",
+      "columns": {
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "year_filed": "date",
+        "meets_threshold": "controlled",
+        "docket_found": "controlled",
+        "search_truncated": "controlled",
+        "entries_classified": "quantity",
+        "entries_unclassified": "quantity",
+        "applications_listed": "quantity",
+        "orders_listed": "quantity",
+        "documents_available": "quantity",
+        "documents_stored": "quantity"
+      }
+    },
+    "data/conformed/m04_coverage.csv": {
+      "grain": "one row per grouping value; M-04",
+      "columns": {
+        "grouping": "controlled",
+        "group_value": "controlled",
+        "cases": "quantity",
+        "cases_with_a_docket": "quantity",
+        "cases_with_any_stored_document": "quantity",
+        "cases_complete_enumeration": "quantity",
+        "applications_listed": "quantity",
+        "documents_stored": "quantity",
+        "case_reach_rate": "quantity",
+        "document_reach_rate": "quantity"
+      }
     }
   }
 }
