@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Secrets. The CourtListener token is read from the environment, never a file.
+.env
+*.token
+
+# ---------------------------------------------------------------------------
+# What is deliberately NOT committed, and why. The same reasoning appears in
+# governance/freeze.toml's excluded block, because a reader arriving at either
+# file asks the same question.
+# ---------------------------------------------------------------------------
+
+# The DuckDB working database. Rebuildable from the committed csv artifacts in
+# one command, large, and a binary that would churn on every run.
+data/conformed/*.duckdb
+
+# Fee-application PDFs retrieved from the RECAP archive. Potentially thousands
+# of files and many gigabytes, and every one of them names individual
+# timekeepers on nearly every page -- committing them would defeat the
+# person-name control the rest of this repo implements. The freeze over this
+# corpus is asserted by hash instead: data/raw/recap/manifest.csv is committed
+# and src/validate.py recomputes every sha256 in it on every run. A fresh clone
+# therefore has no corpus; re-fetch it with src/pull_fee_applications.py and
+# check it against the manifest. That is a verified restore, not a re-pull.
+data/raw/recap/**/*.pdf
+
+# API response cache and the acquisition roster: working state of a resumable
+# job, not evidence. The roster records which cases have been searched so a
+# stopped run can continue; the cache exists so a resumed run does not re-ask
+# questions it already has answers to.
+data/live/
