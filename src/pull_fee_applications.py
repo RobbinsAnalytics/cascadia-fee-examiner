@@ -199,9 +199,10 @@ def looks_like_organisation(s: str) -> bool:
         return False
     if _NOISE.search(s):
         return False
-    # "Lastname, Firstname" with nothing else is a person, not a firm.
-    if re.fullmatch(r"[A-Z][a-z]+,\s*[A-Z][a-z]+\.?", s.strip()):
-        return False
+    # An organisational cue decides it. "Wellman, Inc." is shaped like
+    # "Lastname, Firstname" and is a company; the cue test alone already
+    # refuses "Keane, Peter", so a separate person-shape test only adds a
+    # false refusal.
     return bool(_ORG_CUE.search(s))
 
 
