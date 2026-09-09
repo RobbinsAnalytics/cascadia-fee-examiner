@@ -1,0 +1,10 @@
+court_id,docket_number,application_entry_id,order_entry_id,filer_normalised,application_type,order_basis,fees_requested,fees_allowed,cut_absolute,cut_pct,status,rule
+nysb,17-22770,24590634,,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,final,,,,,,not_paired,1: no parsed order on this docket
+txnb,17-31432,24732795,,,final,,,,,,not_paired,1: no parsed order on this docket
+deb,20-11177,141574549,,,interim,,,,,,not_paired,1: no parsed order on this docket
+vaeb,15-33896,12366662,,,interim,,,,,,not_paired,2: order is omnibus
+deb,22-10426,331328263,,,final,,,,,,not_paired,1: no parsed order on this docket
+deb,22-10426,331328263,,,final,,,,,,not_paired,1: no parsed order on this docket
+deb,22-10426,370663496,,,interim,,,,,,not_paired,1: no parsed order on this docket
+deb,22-10426,331337164,,"Skadden, Arps, Slate, Meagher & Flom LLP",final,,,,,,not_paired,1: no parsed order on this docket
+txsb,16-33590,28694298,,,final,,,,,,not_paired,3: filer strings do not resolve to one firm

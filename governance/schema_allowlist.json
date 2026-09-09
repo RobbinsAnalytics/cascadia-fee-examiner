@@ -395,6 +395,43 @@
         "storage_url": "identifier",
         "retrieved_utc": "date"
       }
+    },
+    "data/conformed/fact_order.csv": {
+      "grain": "one row per stored fee order; what the court allowed",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "document_number": "identifier",
+        "filer_normalised": "organisation",
+        "professional_type": "controlled",
+        "basis": "controlled",
+        "fees_allowed": "quantity",
+        "expenses_allowed": "quantity",
+        "total_allowed": "quantity",
+        "fee_awards_found": "quantity",
+        "omnibus": "controlled",
+        "parse_status": "controlled"
+      }
+    },
+    "data/conformed/v2_requested_vs_allowed.csv": {
+      "grain": "one row per parsed application; paired to an order or the rule that prevented it",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "application_entry_id": "identifier",
+        "order_entry_id": "identifier",
+        "filer_normalised": "organisation",
+        "application_type": "controlled",
+        "order_basis": "controlled",
+        "fees_requested": "quantity",
+        "fees_allowed": "quantity",
+        "cut_absolute": "quantity",
+        "cut_pct": "quantity",
+        "status": "controlled",
+        "rule": "free_text"
+      }
     }
   }
 }

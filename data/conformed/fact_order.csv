@@ -1,0 +1,11 @@
+docket_entry_id,case_primary_key,court_id,docket_number,document_number,filer_normalised,professional_type,basis,fees_allowed,expenses_allowed,total_allowed,fee_awards_found,omnibus,parse_status
+30296170,1039,vaeb,15-33896,3615,Protiviti Inc,financial_advisor,final,,1024.56,,7,true,parsed
+30296171,1039,vaeb,15-33896,3608,Services Rendered and Reimbursement of Expenses Incurred for Sands Anderson PC,law_firm,,,,,0,false,unparsed
+134761043,1160,txsb,19-35133,1940,"Conway Mackenzie, Inc",financial_advisor,interim,608524.00,1547.19,,1,false,parsed
+174981956,1229,txsb,21-90002,527,,unknown,final,,,,0,false,unparsed
+32297958,1124,deb,18-10248,949,Expenses of Pachulski Stang Ziehl & Jones LLP,law_firm,interim,,20902.87,,0,false,unparsed
+24090264,1124,deb,18-10248,292,,unknown,final,,,,0,false,unparsed
+112799113,1151,txsb,19-32713,941,Perella Weinberg Partners LP,financial_advisor,final,3664056.18,,,1,false,parsed
+112799100,1151,txsb,19-32713,943,,law_firm,final,,,,0,false,unparsed
+28694383,1077,txsb,16-33590,1382,"Greenberg Traurig, LLP",law_firm,final,,6144750.50,,0,false,unparsed
+28694397,1077,txsb,16-33590,1396,"Conway MacKenzie, Inc",financial_advisor,final,4563.00,1595505.75,,1,false,parsed

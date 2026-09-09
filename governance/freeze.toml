@@ -82,6 +82,9 @@ protected_paths = [
   "data/conformed/dim_firm.csv",
   "data/conformed/bridge_firm_alias.csv",
   "data/conformed/unresolved_firms.csv",
+  # stage 5
+  "data/conformed/fact_order.csv",
+  "data/conformed/v2_requested_vs_allowed.csv",
 ]
 
 # DELIBERATELY NOT PROTECTED, each with the reason, so that absence from the

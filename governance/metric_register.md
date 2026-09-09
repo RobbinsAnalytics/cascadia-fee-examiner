@@ -187,6 +187,33 @@ than a caveat: it states what a constraint costs, as a number.
 
 ---
 
+## V-2 · Requested against allowed — the external reconciliation
+
+> **Definition.** For a parsed law-firm application paired to a single-award
+> order on the same docket for the same filer and basis, the fees the court
+> allowed as a share of the fees requested.
+
+| | |
+|---|---|
+| **Owner** | Aaron Robbins |
+| **Output** | `data/conformed/v2_requested_vs_allowed.csv`; `governance/reconciliation.md` |
+| **Lineage** | `fact_application.total_fees_stated` (the applicant) against `fact_order.fees_allowed` (the court) |
+| **Pairing** | Four rules in `src/reconcile_orders.py`, and every unpaired application is written out with the rule that stopped it |
+
+**This is the module's one figure against an answer key it did not produce.**
+It is not a measure of the estate — it is a defect rate on the applicant's
+claim, judged by a different author.
+
+**Limits.**
+- **An omnibus order publishes no single allowed figure.** Several professionals'
+  awards in one order, or one applicant's cumulative periods restated in a final
+  order, cannot be attributed without a rule this module has not written. The
+  award count is published and the amount is left blank.
+- **The pairing rate is published beside the variance rate**, and at this corpus
+  size it is zero of nine: seven applications have no parsed order on their
+  docket yet, one order is omnibus, one filer string did not resolve. A looser
+  rule would pair more and claim less.
+
 ## Measures deliberately not certified
 
 **Total professional fees per case.** The archive holds a minority of the

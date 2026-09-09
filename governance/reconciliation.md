@@ -25,3 +25,15 @@ only; both figures are right and they answer different questions.
 
 Comparable: 0 · tied: 0 · not comparable: 8
 
+## V-2 · Requested against allowed
+
+*The court's order is the answer key: a different author than the application it responds to.*
+
+Parsed applications: 9 · parsed orders: 4 · **paired: 0**
+
+| Why not paired | Applications |
+|---|---:|
+| 1: no parsed order on this docket | 7 |
+| 2: order is omnibus | 1 |
+| 3: filer strings do not resolve to one firm | 1 |
+
