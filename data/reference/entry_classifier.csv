@@ -1,0 +1,18 @@
+priority,entry_class,pattern,professional_type_hint,note
+10,application_amended,"(?i)\b(amended|corrected|supplemental|substitute)\b.{0,60}\bfee (application|statement)\b",,"Supersedes an earlier application for the same period. Must be classed before the plain application rule or it is read as an original, and the period is then counted twice."
+11,application_amended,"(?i)\bfee application\b.{0,40}\b(as amended|amendment)\b",,
+20,order,"(?i)\border\b.{0,80}\b(fee application|application for compensation|compensation and reimbursement)\b",,"The court's own award. THIS IS THE ANSWER KEY for stage 5: it is written by a different author than the application it responds to."
+21,order,"(?i)\b(granting|approving|awarding|denying)\b.{0,60}\b(fee|compensation)\b",,
+30,certification,"(?i)\bcertificat(e|ion) of (no objection|counsel)\b",,"Procedural. Carries no hours and no fees."
+31,notice,"(?i)^\s*notice\b.{0,80}\b(fee application|application for compensation)\b",,"A notice of an application is not the application. Its text is a service list."
+32,service,"(?i)\b(affidavit|declaration|certificate) of (service|mailing)\b",,"Proof that a document was served. Frequently the top hit for a fee-application query and never the document wanted."
+40,objection,"(?i)\b(objection|response|reply|limited objection)\b.{0,80}\b(fee application|application for compensation|compensation)\b",,"An objection to someone else's fees. Relevant to a later build; not a source of the applicant's own hours."
+50,fee_examiner_report,"(?i)\bfee (examiner|auditor|review committee)\b.{0,60}\b(report|recommendation|summary)\b",,"A third party's review. Its numbers are derived from the applications rather than filed by the professional, so using it as a source would double-count."
+60,monthly_statement,"(?i)\bmonthly fee statement\b",,"Interim billing under a compensation order. Its periods are subsumed by the interim application that follows, so counting both double-counts the same hours."
+61,monthly_statement,"(?i)\bmonthly\b.{0,30}\bstatement of\b.{0,40}\b(fees|compensation)\b",,
+70,application_final,"(?i)\bfinal\b.{0,40}\b(fee application|application for (final )?compensation)\b",,"Covers the whole case and re-presents every interim period. Never summed with the interims it supersedes."
+71,application_final,"(?i)\bapplication for final compensation\b",,
+80,application_interim,"(?i)\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|\d{1,2}(st|nd|rd|th))\b.{0,30}\binterim\b.{0,40}\b(fee application|application for compensation)\b",,
+81,application_interim,"(?i)\binterim (fee application|application for compensation)\b",,
+82,application_interim,"(?i)\bapplication for compensation\b",,"The generic form. Lowest priority of the application rules so a more specific class wins first."
+83,application_interim,"(?i)\bfee application\b",,"Last resort. Anything reaching here is an application of unstated period, and parse_status records that."

@@ -132,6 +132,25 @@
         "match_type": "controlled",
         "note": "free_text"
       }
+    },
+    "data/reference/entry_classifier.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "entry_class": "controlled",
+        "pattern": "controlled",
+        "professional_type_hint": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/professional_type.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "professional_type": "controlled",
+        "pattern": "controlled",
+        "note": "free_text"
+      }
     }
   }
 }

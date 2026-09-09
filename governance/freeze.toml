@@ -58,6 +58,9 @@ protected_paths = [
   # stage 2
   "data/reference/crosswalk_task_codes.csv",
   "data/conformed/dim_task_code.csv",
+  # stage 3a
+  "data/reference/entry_classifier.csv",
+  "data/reference/professional_type.csv",
 ]
 
 # DELIBERATELY NOT PROTECTED, each with the reason, so that absence from the

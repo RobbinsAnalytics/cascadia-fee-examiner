@@ -234,6 +234,50 @@ def check_subject_matter() -> None:
             ok(f"SM-3: the run record publishes the exclusion count ({n})")
 
 
+def check_no_stray_control_bytes() -> None:
+    """No tracked text file carries a control byte that is not tab or newline.
+
+    THIS CHECK IS HERE BECAUSE THE FAILURE IT CATCHES ALREADY HAPPENED, in this
+    repository, on 2026-09-09. A tool layer between an authoring session and
+    disk interpreted the two-character sequence backslash-b inside a regular
+    expression and wrote a single 0x08 byte instead. The file still parsed, the
+    module still imported, and every rule in the affected pattern silently
+    stopped matching anything -- because the pattern now required a literal
+    backspace character that no docket description contains.
+
+    That is the exact shape this estate cares about: a guard that is present,
+    tracked, syntactically valid, and unable to fire. It cost four rules in the
+    entry classifier and was found by testing the classifier against real
+    descriptions rather than by reading it. A regex is not reviewable by eye at
+    the byte level, so the check is a mechanism instead.
+    """
+    print("\nE. Source integrity -- no stray control bytes in tracked text")
+    r = subprocess.run(["git", "-C", str(ROOT), "ls-files"],
+                       capture_output=True, text=True)
+    text_suffixes = {".py", ".csv", ".json", ".md", ".toml", ".txt", ".sha256"}
+    allowed = {9, 10, 13}  # tab, newline, carriage return
+    offenders = []
+    for rel in r.stdout.split("\n"):
+        rel = rel.strip()
+        if not rel or Path(rel).suffix not in text_suffixes:
+            continue
+        p = ROOT / rel
+        if not p.exists():
+            continue
+        data = p.read_bytes()
+        hits = [(i, b) for i, b in enumerate(data) if b < 32 and b not in allowed]
+        if hits:
+            i, b = hits[0]
+            ctx = data[max(0, i - 40):i + 20].decode("utf-8", "replace")
+            offenders.append(f"{rel}: {len(hits)} byte(s), first 0x{b:02x} "
+                             f"near ...{ctx.strip()}...")
+    if offenders:
+        for o in offenders:
+            fail(o)
+    else:
+        ok("no control bytes outside tab, newline and carriage return")
+
+
 def main() -> int:
     print("Cascadia Fee Examiner -- domain publish gate")
     check_sidecars()
@@ -241,6 +285,7 @@ def main() -> int:
     check_protected_paths_tracked()
     check_schemas()
     check_subject_matter()
+    check_no_stray_control_bytes()
 
     print("\n" + "=" * 72)
     if failures:
