@@ -149,19 +149,30 @@ def main() -> int:
                 r["professional_type"] = new_prof
                 changed += 1
             kept.append(r)
-        # Re-derive entry_class from the cache where we can see the entry.
+        # Re-derive entry_class AND the filer string from the cache. The
+        # manifest carries no description, so the cache is the only place these
+        # can be recomputed -- which is the whole reason the cache is kept.
         cache_class: dict[str, str] = {}
+        cache_filer: dict[str, str] = {}
         for cache_file in CACHE_DIR.glob("*.json"):
             for res in json.loads(cache_file.read_text(encoding="utf-8")).get(
                     "results", []):
                 cid = str(res.get("docket_entry_id"))
+                desc = res.get("description", "")
                 if cid not in cache_class:
                     cache_class[cid] = classify(
-                        res.get("description", ""), entry_rules,
-                        "entry_class") or "unclassified"
+                        desc, entry_rules, "entry_class") or "unclassified"
+                    cache_filer[cid] = normalise_filer(desc)
         final = []
         for r in kept:
-            new_cls = cache_class.get(str(r["docket_entry_id"]), r["entry_class"])
+            cid = str(r["docket_entry_id"])
+            new_filer = cache_filer.get(cid, r["filer_normalised"])
+            if new_filer != r["filer_normalised"]:
+                # Refused values are cleared rather than kept: an unresolved
+                # firm is publishable, a leaked personal name is not.
+                r["filer_normalised"] = new_filer
+                changed += 1
+            new_cls = cache_class.get(cid, r["entry_class"])
             if new_cls != r["entry_class"]:
                 print(f"  reclassified entry {r['docket_entry_id']}: "
                       f"{r['entry_class']} -> {new_cls}")

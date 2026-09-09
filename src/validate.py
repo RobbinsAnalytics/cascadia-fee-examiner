@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import re
 import json
 import subprocess
 import sys
@@ -234,6 +235,55 @@ def check_subject_matter() -> None:
             ok(f"SM-3: the run record publishes the exclusion count ({n})")
 
 
+def check_organisation_columns() -> None:
+    """Every value in an `organisation` column must look like an organisation.
+
+    THE SCHEMA CHECK ABOVE IS NOT ENOUGH, and this is why. A column can be
+    correctly named, correctly declared, and still carry the wrong KIND of
+    string -- because its values are copied from publisher text rather than
+    derived. On 2026-09-09 a docket description that ran past the end of a firm
+    name was captured whole, carrying the filing attorney's name out of the
+    court's own parenthetical: "...Order # 3 Notice) (Keane, Peter) (Entered:
+    11/14/2023)". It reached two working tables and no committed one, and it was
+    stopped by the order the session happened to run in rather than by a
+    control.
+
+    So the class declaration is now enforced on the values, not only on the
+    header. This inspects CONTENT, which is a stronger claim than the header
+    check makes and a weaker one than proving no person is ever named -- a firm
+    called for its founders is indistinguishable from a person by shape alone,
+    which is why the rule is stated by class rather than by string.
+    """
+    print("\nF. Organisation columns -- values, not just headers")
+    spec = json.loads(ALLOWLIST.read_text(encoding="utf-8"))
+    noise = re.compile(
+        r"(?i)\(Entered:|Hearing scheduled|Filed by|\bDoc\b|#\s*\d|"
+        r"\bNotice\)|\bObjections? due|\d{1,2}/\d{1,2}/\d{2,4}")
+    person = re.compile(r"^[A-Z][a-z]+,\s*[A-Z][a-z]+\.?$")
+    checked = offenders = 0
+    for rel, table in spec["tables"].items():
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        org_cols = [c for c, cls in table["columns"].items()
+                    if cls == "organisation"]
+        if not org_cols:
+            continue
+        for row in csv.DictReader(path.open(encoding="utf-8", newline="")):
+            for c in org_cols:
+                v = (row.get(c) or "").strip()
+                if not v:
+                    continue
+                checked += 1
+                if noise.search(v) or person.fullmatch(v):
+                    offenders += 1
+                    fail(f"{rel}.{c}: value is not an organisation -- "
+                         f"{v[:60]!r}")
+    if offenders == 0:
+        ok(f"{checked:,} organisation value(s) carry no docket noise and no "
+           f"bare personal-name shape")
+
+
 def check_no_stray_control_bytes() -> None:
     """No tracked text file carries a control byte that is not tab or newline.
 
@@ -285,6 +335,7 @@ def main() -> int:
     check_protected_paths_tracked()
     check_schemas()
     check_subject_matter()
+    check_organisation_columns()
     check_no_stray_control_bytes()
 
     print("\n" + "=" * 72)

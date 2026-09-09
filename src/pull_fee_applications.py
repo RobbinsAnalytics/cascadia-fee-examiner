@@ -30,21 +30,29 @@ WHAT IT REFUSES TO DO
     vocabulary is data/reference/entry_classifier.csv, applied before any
     storage request, and the unclassified rate is published.
 
-RATE, MEASURED RATHER THAN GUESSED
-Documented limits are 5/min, 50/hour, 125/day for AUTHENTICATED users. This
-script runs unauthenticated -- /search/ and the storage PDFs both serve without
-a token -- so the documented figures do not describe it and the safe spacing had
-to be established by measurement. On 2026-09-09, against one query repeated:
+RATE, MEASURED -- AND THE FIRST MEASUREMENT WAS WRONG IN A WAY WORTH RECORDING
 
-    2.0s spacing   HTTP 429 on the 5th request
-    2.5s spacing   two 429s in 16 requests
-    3.0s spacing   14 requests, 45 seconds, zero 429s
-    8.0s spacing   20+ requests, zero 429s
+A short burst was measured clean at 3 seconds and the spacing was set to 4. That
+was a claim about a BURST generalised to SUSTAINED use, and it was false: the run
+stopped itself after 86 requests over 25 minutes on sustained rate limiting.
+Verification strength is part of a claim, and "fourteen requests in forty-five
+seconds" does not establish an hourly rate.
 
-SEARCH_SPACING is set to 4.0s: a third above the fastest interval measured
-clean, rather than at it. Exponential backoff on any 429 and a hard per-run
-request ceiling are the other two halves -- an unattended run stops and records
-that it stopped rather than becoming a hammering.
+The server states its own limits in the body of the 429, which is better
+evidence than any timing experiment:
+
+    unauthenticated   "Rate limit exceeded: 50/hour"
+    authenticated     "Rate limit exceeded: 5/min"
+
+So authentication is worth six times the hourly throughput -- 300/hour against
+50 -- and the documented 5/min, 50/hour, 125/day figures describe the
+AUTHENTICATED tier, while unauthenticated use is capped an order of magnitude
+lower per hour. Spacing is therefore derived from which credential is in use
+rather than from a constant, and the token is read from the environment and
+never from a file.
+
+Downloads come from a different host (storage.courtlistener.com) and are not
+throttled by the API limiter; they keep their own, gentler spacing.
 """
 
 from __future__ import annotations
@@ -78,7 +86,10 @@ API = "https://www.courtlistener.com/api/rest/v4/search/"
 STORAGE = "https://storage.courtlistener.com/"
 UA = "cascadia-fee-examiner/1.0 (portfolio research; ajayrobbins@hotmail.com)"
 
-SEARCH_SPACING = 4.0
+# 5/min authenticated, 50/hour unauthenticated, both quoted by the server.
+# A little over the stated interval in each case, not exactly at it.
+SEARCH_SPACING_AUTH = 12.5      # 4.8/min
+SEARCH_SPACING_ANON = 74.0      # 48.6/hour
 DOWNLOAD_SPACING = 2.0
 MAX_BACKOFF = 300.0
 PAGE_SIZE_GUESS = 20
@@ -139,11 +150,59 @@ def normalise_filer(description: str) -> str:
     # introduces the filer; taking the first returns "Expenses of Jefferies LLC".
     tail = description[hits[-1].end():]
     tail = re.split(
-        r"(?i),?\s+(?:as\s+|attorneys?\s+for|counsel\s+(?:to|for)|for\s+the\s+"
-        r"(?:period|debtors?|month)|covering|from\s+\w+\s+\d)\b", tail
+        r"(?i),?\s+(?:as\s+|attorneys?\s+for|counsel\s+(?:to|for)|"
+        r"for\s+the\s+(?:period|debtors?|month)|covering|from\s+\w+\s+\d|"
+        r"for\s+(?:the\s+)?allowance|for\s+services|for\s+compensation|"
+        r"seeking|requesting|in\s+the\s+amount)\b", tail
     )[0]
     tail = re.split(r"\s*\[|\s*\(Related", tail)[0]
-    return " ".join(tail.split()).strip(" ,;.")
+    candidate = " ".join(tail.split()).strip(" ,;.")
+    return candidate if looks_like_organisation(candidate) else ""
+
+
+# Docket text that means the extraction ran past the end of the firm name.
+_NOISE = re.compile(
+    r"(?i)\(Entered:|Hearing scheduled|Filed by|\bDoc\b|#\s*\d|"
+    r"\bNotice\)|\bre:|\bDeadline|\bObjections? due|\d{1,2}/\d{1,2}/\d{2,4}"
+)
+
+# Cues that a string names an ORGANISATION. Nothing without one is kept.
+_ORG_CUE = re.compile(
+    r"(?i)\b(l\.?l\.?p|l\.?l\.?c|p\.?l\.?l\.?c|p\.?c|p\.?a|plc|ltd|inc|"
+    r"incorporated|corp|corporation|company|co\.|chartered|group|partners|"
+    r"associates|consulting|advisors|advisers|holdings|&)\b|&"
+)
+
+
+def looks_like_organisation(s: str) -> bool:
+    """Refuse anything that is not recognisably a firm. FAIL CLOSED.
+
+    THIS FUNCTION EXISTS BECAUSE THE EXTRACTOR LEAKED A PERSON'S NAME. On
+    2026-09-09 a docket description ending "...Order # 3 Notice) (Keane, Peter)
+    (Entered: 11/14/2023)" was captured whole as a filer name and reached two
+    working tables. Nothing had been committed, so nothing escaped -- but the
+    escape was prevented by the order the session happened to do things in, and
+    that is not a control.
+
+    The design layer of the person-name rule aggregates timekeepers before
+    writing, so timekeeper names were never at risk. The FILER string was the
+    unguarded path: it is copied from publisher text rather than derived, and a
+    caption that runs on carries whatever follows it, including the filing
+    attorney's name in the court's own parenthetical.
+
+    So this refuses by default. A string is kept only if it carries an explicit
+    organisational cue AND no docket-noise marker. The cost is a lower match
+    rate, and that is the correct direction to be wrong in: an unresolved firm
+    is published as unresolved, while a leaked name is a control failure.
+    """
+    if not s or len(s) < 4 or len(s) > 160:
+        return False
+    if _NOISE.search(s):
+        return False
+    # "Lastname, Firstname" with nothing else is a person, not a firm.
+    if re.fullmatch(r"[A-Z][a-z]+,\s*[A-Z][a-z]+\.?", s.strip()):
+        return False
+    return bool(_ORG_CUE.search(s))
 
 
 def sha256_of(path: Path) -> str:
@@ -262,6 +321,15 @@ def main() -> int:
     budget = Budget(args.max_requests)
     session = requests.Session()
     session.headers.update({"User-Agent": UA})
+    token = (os.environ.get("COURTLISTENER_TOKEN") or "").strip()
+    if token:
+        session.headers["Authorization"] = f"Token {token}"
+    spacing = SEARCH_SPACING_AUTH if token else SEARCH_SPACING_ANON
+    print(f"Credential             : "
+          f"{'token from COURTLISTENER_TOKEN' if token else 'none (anonymous)'}")
+    print(f"Search spacing         : {spacing}s "
+          f"({'5/min' if token else '50/hour'} as quoted by the server)")
+    print("")
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     PDF_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -298,7 +366,7 @@ def main() -> int:
         results, page, total, truncated = [], 1, None, False
         url, params = API, {"type": "rd", "q": query, "order_by": "score desc"}
         while True:
-            resp = get(session, url, params, budget, SEARCH_SPACING)
+            resp = get(session, url, params, budget, spacing)
             if resp is None:
                 break
             if resp.status_code >= 500:
@@ -307,8 +375,8 @@ def main() -> int:
                 # record it -- a 502 observed during rate measurement on
                 # 2026-09-09 is why this branch exists.
                 print(f"      HTTP {resp.status_code} -- one retry")
-                time.sleep(SEARCH_SPACING * 2)
-                resp = get(session, url, params, budget, SEARCH_SPACING)
+                time.sleep(spacing * 2)
+                resp = get(session, url, params, budget, spacing)
                 if resp is None or resp.status_code != 200:
                     print(f"      still failing -- case recorded as incomplete")
                     truncated = True
