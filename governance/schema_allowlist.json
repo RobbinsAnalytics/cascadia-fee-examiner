@@ -193,6 +193,24 @@
         "case_reach_rate": "quantity",
         "document_reach_rate": "quantity"
       }
+    },
+    "data/reference/firm_category_to_ustp.csv": {
+      "grain": "one row per firm-authored project category",
+      "columns": {
+        "firm_pattern": "controlled",
+        "category_as_filed": "controlled",
+        "ustp_category": "controlled",
+        "match_type": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/firm_alias_overrides.csv": {
+      "grain": "one hand-authored firm match the rule could not make",
+      "columns": {
+        "brd_name": "organisation",
+        "caption_name": "organisation",
+        "reason": "free_text"
+      }
     }
   }
 }
