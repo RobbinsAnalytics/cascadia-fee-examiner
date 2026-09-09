@@ -1,0 +1,81 @@
+# governance/freeze.toml -- the module-specific half of the freeze gate.
+#
+# Instantiated from cascadia-standards/templates/freeze.example.toml v1.0.0.
+# src/validate_freeze.py is copied verbatim and is never edited; everything
+# module-specific is data, here.
+
+[freeze]
+module = "cascadia-fee-examiner"
+
+# THE PUBLISHER'S DATE, NOT OURS.
+#
+# The Bankruptcy Research Database was frozen by its authors after the December
+# 2022 update; the snapshot is released as "1-12-2023" and the publisher states
+# the download link will remain active indefinitely. So the as-of date of the
+# SPINE is a property of the source.
+#
+# It is not the as-of date of the cost layer. Documents retrieved from the RECAP
+# archive are a genuinely later act against a live archive, and each carries its
+# own retrieval date in data/raw/recap/manifest.csv and in the source register.
+# TWO DATES, TWO CLAIMS. Do not collapse them, and do not stamp a RECAP artifact
+# with the date below.
+as_of_date = "2023-01-12"
+
+# HEAD during the build, deliberately.
+#
+# Six stages each add artifacts, so "unchanged since the freeze commit" is not
+# yet a question that can be asked -- the freeze commit does not exist until the
+# last artifact lands. HEAD asks the question that IS answerable today: did this
+# run mutate something it had already committed, which is the common failure.
+# When the build is complete this is pinned to the commit at which the last
+# protected artifact legitimately changed, and every later change is declared
+# below as a permitted_edit with its reason.
+baseline = "HEAD"
+
+# A PATTERN THAT MATCHES NOTHING FAILS THE GATE, deliberately -- a frozen file
+# deleted or renamed is exactly what this exists to catch. So each stage adds
+# its own patterns as its artifacts land, and this list grows with the build
+# rather than being written ahead of it. What is here is what stage 1 produced.
+#
+# EVERY PATH HERE IS GIT-TRACKED, and src/validate.py proves it on every run by
+# resolving this list and asking git's index about each result. A gitignored
+# path inside this list would FAIL OPEN: Path.glob matches the filesystem, not
+# the index, so an ignored file resolves and is counted, and then
+# `git diff --quiet <baseline> -- <path>` exits 0 because git reports no change
+# on a file it does not track. The gate would say "checked, passing" about a
+# file it never compared.
+protected_paths = [
+  "data/raw/brd/brd_cases_table.zip",
+  "data/raw/brd/brd_cases_table.zip.sha256",
+  "data/raw/reference/fr_2013-14323_appendix_b.pdf",
+  "data/raw/reference/fr_2013-14323_appendix_b.pdf.sha256",
+  "data/raw/reference/aba_utbms_bankruptcy_codes_1997.xlsx",
+  "data/raw/reference/aba_utbms_bankruptcy_codes_1997.xlsx.sha256",
+  "data/reference/excluded_sic.csv",
+  "data/reference/dim_court.csv",
+  "data/conformed/dim_case.csv",
+]
+
+# DELIBERATELY NOT PROTECTED, each with the reason, so that absence from the
+# list above reads as a decision rather than an oversight.
+#
+#   data/raw/recap/**/*.pdf
+#       Gitignored, so listing it here would fail open (see above). Thousands of
+#       files, many gigabytes, and every one names individual timekeepers -- so
+#       committing them would defeat the person-name control. The freeze over
+#       this corpus is asserted by hash instead: data/raw/recap/manifest.csv is
+#       committed and protected, and src/validate.py recomputes every sha256 in
+#       it on every run. This is the module's one departure from the house
+#       pattern of committing data/raw/ outright, and it is a stronger reason
+#       than size alone.
+#
+#   data/conformed/*.duckdb
+#       A rebuildable working database, and a binary that would churn each run.
+#
+#   data/live/**
+#       The acquisition roster and the API response cache: resumable-job state,
+#       not evidence. Re-running the job legitimately changes both.
+#
+#   governance/health.json, last_run.json, run_history.jsonl
+#       Run records. They are SUPPOSED to change on every run; freezing them
+#       would make the gate fail on the act of reporting.

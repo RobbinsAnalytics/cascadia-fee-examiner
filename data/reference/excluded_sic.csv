@@ -1,0 +1,2 @@
+sic_major_code,sic_major_description,rule,owner
+48,Communications,"Excluded at the spine before any measure is computed. The rule is stated at sector level rather than at any one company: an exclusion aimed at a single name misses that name's predecessors, its operating entities, and every competitor whose inclusion would raise the same objection. SIC major group 48 is the debtor's own primary classification as recorded by the publisher, so this is an industry test and not a name match.",Aaron Robbins

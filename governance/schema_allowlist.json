@@ -1,0 +1,70 @@
+{
+  "_what_this_is": "The declared header of every table this repo commits. src/validate.py compares each committed table against its entry here and exits non-zero on any difference, including an ADDED column. This is the person-name control's checking half; the enforcing half is that every writer in src/ emits an allow-list rather than a source's whole row, so a new upstream field cannot arrive in an output at all. Both halves are needed: the writer stops the common case, this stops a writer being changed without the change being noticed.",
+  "_why_a_publish_gate_and_not_a_git_hook": "The canonical .githooks/pre-commit runs exactly two gates and ends in `exec`; it is marked 'Never edit' and its bytes are hashed by the estate's drift check, so a third gate cannot be chained without creating drift. A PreToolUse hook was considered and rejected: SESSION-RULES rule 3 and the starter kit both record that a PreToolUse gate is handed the index as it stood BEFORE the tool call, so staging and committing inside one call passes a gate that already read the index -- which is precisely why the whitespace check was moved OUT of PreToolUse and into a git hook. Repeating that shape would produce a control that reports success and enforces nothing. So this runs in src/validate.py, which exits non-zero and stops the build. The absence of an extension point in the canonical hook is reported as a build-forward candidate for cascadia-standards, not worked around here.",
+  "_content_class": {
+    "organisation": "Names a company, law firm, court or agency -- a party to a public filing, not a person. An eponymous firm name is an organisation.",
+    "person": "Names a natural person. NO COLUMN MAY DECLARE THIS. Its presence in this file is itself a validation failure, so the forbidden class is nameable rather than merely absent.",
+    "identifier": "A key, code or docket number.",
+    "quantity": "A number.",
+    "date": "A date or a year.",
+    "controlled": "A value from a declared vocabulary in data/reference/.",
+    "free_text": "Publisher-authored prose. Permitted only where the publisher's own text cannot name a person."
+  },
+  "_forbidden_source_columns": [
+    "JudgeFiling", "JudgeDisposition", "JudgeApptDist", "DateJudgeAppt",
+    "CeoFiling", "CeoNotes", "CeoReplaced", "DateCeoBegin", "DateCeoEnd",
+    "TrusteeName", "ExaminerName", "TurnPerson", "CommRetireesName",
+    "attorney", "attorneys", "party", "parties", "assignedTo", "referredTo",
+    "assigned_to", "referred_to", "judge", "judge_name", "timekeeper",
+    "timekeeper_name", "narrative", "description_of_services"
+  ],
+  "tables": {
+    "data/conformed/dim_case.csv": {
+      "grain": "one row per BRD case, after the subject-matter exclusion",
+      "columns": {
+        "PrimaryKey": "identifier", "CaseNum": "identifier",
+        "NameCorp": "organisation", "CommonName": "organisation",
+        "CikBefore": "identifier",
+        "DateFiled": "date", "YearFiled": "date", "DateConfirmed": "date",
+        "YearConfirmed": "date", "DateDisposed": "date", "YearDisposed": "date",
+        "DaysIn": "quantity",
+        "DistFiled": "controlled", "CityFiled": "controlled",
+        "Chapter": "controlled", "Voluntary": "controlled",
+        "Prepackaged": "controlled", "Disposition": "controlled",
+        "Emerge": "controlled", "Shop": "controlled",
+        "AssetsPetition": "quantity", "LiabPetition": "quantity",
+        "AssetsBefore": "quantity", "LiabBefore": "quantity",
+        "SalesBefore": "quantity", "EmplBefore": "quantity",
+        "SICPrimary": "identifier", "SICDescription": "controlled",
+        "SICIndustryGroup": "controlled", "SICMajGroup": "controlled",
+        "SICDivision": "controlled",
+        "DipAtty": "organisation", "CommCredAtty": "organisation",
+        "ClaimsAgent": "controlled", "ClaimsAgentFirm": "organisation",
+        "ProfFees10k": "quantity", "DateFeeRev": "date",
+        "FeeReviewer": "controlled",
+        "DktOnPacer": "controlled", "DocsOnPacer": "controlled",
+        "DocsPublic": "controlled",
+        "court_id": "identifier", "filed_iso": "date",
+        "in_appendix_b_era": "controlled", "meets_threshold": "controlled",
+        "threshold_basis": "free_text", "sic_major_code": "identifier"
+      }
+    },
+    "data/reference/dim_court.csv": {
+      "grain": "one row per CourtListener bankruptcy court id derived from the spine",
+      "columns": {
+        "court_id": "identifier",
+        "brd_dist_filed": "controlled",
+        "cases": "quantity"
+      }
+    },
+    "data/reference/excluded_sic.csv": {
+      "grain": "one row per SIC major group excluded by the subject-matter rule",
+      "columns": {
+        "sic_major_code": "identifier",
+        "sic_major_description": "controlled",
+        "rule": "free_text",
+        "owner": "organisation"
+      }
+    }
+  }
+}
