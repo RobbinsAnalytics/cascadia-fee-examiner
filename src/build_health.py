@@ -146,6 +146,20 @@ def main() -> int:
             "overrides_used": resolution.get("overrides_used"),
             "unresolved_examples_file": "data/conformed/unresolved_firms.csv",
         },
+        "reconciliation_V2": (lambda v2, fo: {
+            "orders_in_corpus": len(fo),
+            "orders_parsed": sum(1 for r in fo if r["parse_status"] == "parsed"),
+            "orders_omnibus": sum(1 for r in fo if r["omnibus"] == "true"),
+            "applications_considered": len(v2),
+            "paired": sum(1 for r in v2 if r["status"] == "paired"),
+            "not_paired_by_rule": {
+                k: sum(1 for r in v2 if r["status"] != "paired" and r["rule"] == k)
+                for k in sorted({r["rule"] for r in v2 if r["status"] != "paired"})},
+            "median_cut_pct": (sorted(float(r["cut_pct"]) for r in v2
+                                      if r["status"] == "paired" and r["cut_pct"])
+                               [sum(1 for r in v2 if r["status"] == "paired") // 2]
+                               if any(r["status"] == "paired" for r in v2) else None),
+        })(rows(C / "v2_requested_vs_allowed.csv"), rows(C / "fact_order.csv")),
         "gates": gates,
         "all_gates_passed": all(g["passed"] for g in gates.values()),
     }
