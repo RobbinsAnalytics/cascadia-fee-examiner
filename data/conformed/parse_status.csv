@@ -1,0 +1,50 @@
+docket_entry_id,path,page_count,layout_family,parse_status,reason,role_rows,category_rows
+24590634,data/raw/recap/nysb/6065992/1011.0.pdf,1142,exhibit_a_attorney_table,parsed,,3,23
+110035510,data/raw/recap/njb/14559471/1151.0.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+24732795,data/raw/recap/txnb/6197442/930.0.pdf,41,role_summary_table,parsed,,3,38
+173550602,data/raw/recap/nysb/4328157/1018.0.pdf,17,,unparsed,no known layout matched (detected family: none),0,0
+138804543,data/raw/recap/deb/17181749/568.2.pdf,1,,unparsed,no known layout matched (detected family: none),0,0
+141574549,data/raw/recap/deb/17181749/726.0.pdf,50,role_summary_table,parsed,,1,0
+138549924,data/raw/recap/deb/17181749/517.0.pdf,42,,unparsed,no known layout matched (detected family: none),0,0
+147157402,data/raw/recap/deb/17181749/854.1.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+30296170,data/raw/recap/vaeb/4404812/3615.0.pdf,4,,unparsed,no known layout matched (detected family: none),0,0
+12366662,data/raw/recap/vaeb/4404812/1091.0.pdf,330,generic_timekeeper_table,parsed,,4,0
+30296171,data/raw/recap/vaeb/4404812/3608.0.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+134761043,data/raw/recap/txsb/16185784/1940.0.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+331328261,data/raw/recap/deb/63294998/1400.2.pdf,4,,unparsed,no known layout matched (detected family: none),0,0
+331328263,data/raw/recap/deb/63294998/1399.0.pdf,21,role_summary_table,parsed,,2,0
+331328263,data/raw/recap/deb/63294998/1399.1.pdf,18,role_summary_table,parsed,,1,0
+331328261,data/raw/recap/deb/63294998/1400.0.pdf,21,,unparsed,no known layout matched (detected family: none),0,0
+419203845,data/raw/recap/deb/63294998/1545.3.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+370663496,data/raw/recap/deb/63294998/1488.0.pdf,19,role_summary_table,parsed,,1,0
+331132518,data/raw/recap/deb/63294998/1396.2.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+331328261,data/raw/recap/deb/63294998/1400.1.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+331132518,data/raw/recap/deb/63294998/1396.0.pdf,8,,unparsed,no known layout matched (detected family: none),0,0
+331337164,data/raw/recap/deb/63294998/1403.0.pdf,62,role_subtotal_rows,parsed,,5,0
+419203845,data/raw/recap/deb/63294998/1545.0.pdf,8,,unparsed,no known layout matched (detected family: none),0,0
+419203845,data/raw/recap/deb/63294998/1545.2.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+424663073,data/raw/recap/deb/63294998/1553.2.pdf,21,,unparsed,no known layout matched (detected family: none),0,0
+419203845,data/raw/recap/deb/63294998/1545.1.pdf,11,,unparsed,no known layout matched (detected family: none),0,0
+331132518,data/raw/recap/deb/63294998/1396.1.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+424663073,data/raw/recap/deb/63294998/1553.1.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+424663073,data/raw/recap/deb/63294998/1553.0.pdf,14,,unparsed,no known layout matched (detected family: none),0,0
+424663073,data/raw/recap/deb/63294998/1553.3.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+174981956,data/raw/recap/txsb/60186901/527.0.pdf,6,,unparsed,no known layout matched (detected family: none),0,0
+24532896,data/raw/recap/txsb/4392710/1262.13.pdf,96,,unparsed,no known layout matched (detected family: none),0,0
+24532896,data/raw/recap/txsb/4392710/1262.14.pdf,78,,unparsed,no known layout matched (detected family: none),0,0
+24532896,data/raw/recap/txsb/4392710/1262.18.pdf,77,,unparsed,no known layout matched (detected family: none),0,0
+24532896,data/raw/recap/txsb/4392710/1262.17.pdf,122,,unparsed,no known layout matched (detected family: none),0,0
+24532898,data/raw/recap/txsb/4392710/1260.13.pdf,96,,unparsed,no known layout matched (detected family: none),0,0
+24532898,data/raw/recap/txsb/4392710/1260.14.pdf,78,,unparsed,no known layout matched (detected family: none),0,0
+24532898,data/raw/recap/txsb/4392710/1260.18.pdf,77,,unparsed,no known layout matched (detected family: none),0,0
+32297958,data/raw/recap/deb/6292528/949.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+24090264,data/raw/recap/deb/6292528/292.0.pdf,7,,unparsed,no known layout matched (detected family: none),0,0
+99295196,data/raw/recap/txsb/4392647/411.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+25071443,data/raw/recap/nysb/4328170/2479.0.pdf,72,,unparsed,no known layout matched (detected family: none),0,0
+112799113,data/raw/recap/txsb/15133521/941.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+112799100,data/raw/recap/txsb/15133521/943.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+28694298,data/raw/recap/txsb/4392805/1291.2.pdf,29,role_summary_table,parsed,,1,0
+28694283,data/raw/recap/txsb/4392805/1281.6.pdf,109,,unparsed,no known layout matched (detected family: none),0,0
+28694383,data/raw/recap/txsb/4392805/1382.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+28694397,data/raw/recap/txsb/4392805/1396.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+28693922,data/raw/recap/txsb/4392805/841.6.pdf,239,,unparsed,no known layout matched (detected family: none),0,0

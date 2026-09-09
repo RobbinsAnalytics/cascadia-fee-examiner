@@ -211,6 +211,190 @@
         "caption_name": "organisation",
         "reason": "free_text"
       }
+    },
+    "data/conformed/fact_application.csv": {
+      "grain": "one row per stored fee-application or order document",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "document_number": "identifier",
+        "filer_normalised": "organisation",
+        "professional_type": "controlled",
+        "entry_class": "controlled",
+        "application_type": "controlled",
+        "period_start": "date",
+        "period_end": "date",
+        "page_count": "quantity",
+        "total_fees_stated": "quantity",
+        "total_hours_stated": "quantity",
+        "layout_family": "controlled",
+        "parse_status": "controlled"
+      }
+    },
+    "data/conformed/fact_role_summary.csv": {
+      "grain": "one row per application x firm x conformed role; NO per-person row exists",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "role": "controlled",
+        "timekeepers": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "rate_min": "quantity",
+        "rate_max": "quantity",
+        "layout_family": "controlled"
+      }
+    },
+    "data/conformed/fact_category_summary.csv": {
+      "grain": "one row per application x firm-authored project category",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "category_as_filed": "controlled",
+        "task_code_as_filed": "identifier",
+        "matter_number": "identifier",
+        "hours": "quantity",
+        "fees": "quantity",
+        "layout_family": "controlled"
+      }
+    },
+    "data/conformed/parse_status.csv": {
+      "grain": "one row per stored document",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "path": "identifier",
+        "page_count": "quantity",
+        "layout_family": "controlled",
+        "parse_status": "controlled",
+        "reason": "free_text",
+        "role_rows": "quantity",
+        "category_rows": "quantity"
+      }
+    },
+    "data/conformed/m01_blended_rate_by_category.csv": {
+      "grain": "one row per conformed project category; M-01",
+      "columns": {
+        "ustp_category": "controlled",
+        "applications": "quantity",
+        "firms": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "blended_rate": "quantity",
+        "suppressed": "controlled"
+      }
+    },
+    "data/conformed/m02_staffing_mix.csv": {
+      "grain": "one row per conformed role; M-02",
+      "columns": {
+        "role": "controlled",
+        "applications": "quantity",
+        "firms": "quantity",
+        "timekeepers": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "hours_share": "quantity",
+        "fees_share": "quantity",
+        "rate_min": "quantity",
+        "rate_max": "quantity"
+      }
+    },
+    "data/conformed/m03_rate_progression.csv": {
+      "grain": "one row per docket x filer x role with two or more in-scope applications; M-03",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "role": "controlled",
+        "applications": "quantity",
+        "first_rate_max": "quantity",
+        "last_rate_max": "quantity",
+        "change_absolute": "quantity",
+        "change_pct": "quantity"
+      }
+    },
+    "data/conformed/m05_fee_concentration.csv": {
+      "grain": "one row per in-scope application; M-05",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "categories": "quantity",
+        "fees_total": "quantity",
+        "top3_fees": "quantity",
+        "top3_share": "quantity"
+      }
+    },
+    "data/conformed/unmapped_categories.csv": {
+      "grain": "one row per firm-authored category with no conformance mapping; surfaced, never coerced",
+      "columns": {
+        "category_as_filed": "controlled",
+        "occurrences": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "reason": "free_text"
+      }
+    },
+    "data/conformed/dim_firm.csv": {
+      "grain": "one row per resolved firm",
+      "columns": {
+        "firm_key": "identifier",
+        "canonical_name": "organisation",
+        "source": "controlled",
+        "dockets": "quantity",
+        "applications": "quantity"
+      }
+    },
+    "data/conformed/bridge_firm_alias.csv": {
+      "grain": "one row per resolved (database name, caption name) pair per docket",
+      "columns": {
+        "firm_key": "identifier",
+        "brd_name": "organisation",
+        "caption_name": "organisation",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "match_rule": "controlled",
+        "matched_tokens": "controlled"
+      }
+    },
+    "data/conformed/unresolved_firms.csv": {
+      "grain": "one row per caption firm string the rule could not resolve; the published unresolved set",
+      "columns": {
+        "caption_name": "organisation",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "documents": "quantity",
+        "candidate_brd_names": "organisation",
+        "reason": "free_text"
+      }
+    },
+    "data/raw/recap/manifest.csv": {
+      "grain": "one row per stored corpus document; the hash-asserted freeze over the gitignored PDFs",
+      "columns": {
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "docket_id": "identifier",
+        "docket_entry_id": "identifier",
+        "document_number": "identifier",
+        "attachment_number": "identifier",
+        "entry_class": "controlled",
+        "professional_type": "controlled",
+        "filer_normalised": "organisation",
+        "page_count": "quantity",
+        "bytes": "quantity",
+        "sha256": "identifier",
+        "path": "identifier",
+        "storage_url": "identifier",
+        "retrieved_utc": "date"
+      }
     }
   }
 }

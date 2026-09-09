@@ -1,0 +1,50 @@
+docket_entry_id,case_primary_key,court_id,docket_number,document_number,filer_normalised,professional_type,entry_class,application_type,period_start,period_end,page_count,total_fees_stated,total_hours_stated,layout_family,parse_status
+24590634,1105,nysb,17-22770,1011,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,law_firm,application_final,final,2017-10-01,2018-01-16,1142,3622098.5,4835.4,exhibit_a_attorney_table,parsed
+110035510,1143,njb,19-13448,1151,,financial_advisor,application_interim,interim,2019-02-27,2019-09-30,3,,,,unparsed
+24732795,1099,txnb,17-31432,930,,law_firm,application_interim,final,2017-04-19,2017-10-02,41,6054683.0,9708.6,role_summary_table,parsed
+173550602,1066,nysb,16-11275,1018,"Stifel, Nicolaus & Co., Inc. and Miller Buckfire & Co., L.L.C., Debtors Investment Banker",financial_advisor,application_final,final,,,17,,,,unparsed
+138804543,1186,deb,20-11177,568,Grant Thornton LLP,accountant,application_interim,interim,,,1,,,,unparsed
+141574549,1186,deb,20-11177,726,,law_firm,application_interim,interim,2020-08-01,2020-08-31,50,6840.0,17.1,role_summary_table,parsed
+138549924,1186,deb,20-11177,517,,financial_advisor,application_interim,interim,2020-07-01,2020-07-31,42,,,,unparsed
+147157402,1186,deb,20-11177,854,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,law_firm,application_final,final,2020-08-01,2020-09-04,3,,,,unparsed
+30296170,1039,vaeb,15-33896,3615,Protiviti Inc,financial_advisor,order,order,,,4,,,,unparsed
+12366662,1039,vaeb,15-33896,1091,,law_firm,application_interim,interim,2015-08-03,2015-10-31,330,4417322.5,6661.55,generic_timekeeper_table,parsed
+30296171,1039,vaeb,15-33896,3608,Services Rendered and Reimbursement of Expenses Incurred for Sands Anderson PC,law_firm,order,order,,,3,,,,unparsed
+134761043,1160,txsb,19-35133,1940,"Conway Mackenzie, Inc",financial_advisor,order,order,2020-01-01,2020-03-31,3,,,,unparsed
+331328261,1232,deb,22-10426,1400,"Province, LLC",financial_advisor,application_final,final,2022-11-01,2023-04-17,4,,,,unparsed
+331328263,1232,deb,22-10426,1399,,law_firm,application_final,final,2022-11-01,2023-04-17,21,220013.5,583.1,role_summary_table,parsed
+331328263,1232,deb,22-10426,1399,,law_firm,application_final,final,,,18,8972.5,25.2,role_summary_table,parsed
+331328261,1232,deb,22-10426,1400,"Province, LLC",financial_advisor,application_final,final,2022-05-20,2022-10-31,21,,,,unparsed
+419203845,1232,deb,22-10426,1545,Barley Snyder LLP,law_firm,application_final,final,2023-04-17,2024-07-26,2,,,,unparsed
+370663496,1232,deb,22-10426,1488,,law_firm,application_interim,interim,2023-04-17,2023-09-30,19,55879.0,90.2,role_summary_table,parsed
+331132518,1232,deb,22-10426,1396,,unknown,application_final,final,,,2,,,,unparsed
+331328261,1232,deb,22-10426,1400,"Province, LLC",financial_advisor,application_final,final,2022-11-01,2023-04-17,3,,,,unparsed
+331132518,1232,deb,22-10426,1396,,unknown,application_final,final,,,8,,,,unparsed
+331337164,1232,deb,22-10426,1403,"Skadden, Arps, Slate, Meagher & Flom LLP",law_firm,application_final,final,2023-04-01,2023-04-17,62,8887380.75,8926.5,role_subtotal_rows,parsed
+419203845,1232,deb,22-10426,1545,Barley Snyder LLP,law_firm,application_final,final,2023-04-17,2024-07-26,8,,,,unparsed
+419203845,1232,deb,22-10426,1545,Barley Snyder LLP,law_firm,application_final,final,2023-04-17,2024-07-26,3,,,,unparsed
+424663073,1232,deb,22-10426,1553,Expenses of Giuliano Miller and Company LLC,unknown,application_interim,interim,,,21,,,,unparsed
+419203845,1232,deb,22-10426,1545,Barley Snyder LLP,law_firm,application_final,final,,,11,,,,unparsed
+331132518,1232,deb,22-10426,1396,,unknown,application_final,final,,,3,,,,unparsed
+424663073,1232,deb,22-10426,1553,Expenses of Giuliano Miller and Company LLC,unknown,application_interim,interim,2023-04-17,2025-04-30,3,,,,unparsed
+424663073,1232,deb,22-10426,1553,Expenses of Giuliano Miller and Company LLC,unknown,application_interim,interim,2023-04-17,2025-04-30,14,,,,unparsed
+424663073,1232,deb,22-10426,1553,Expenses of Giuliano Miller and Company LLC,unknown,application_interim,interim,2023-04-17,2025-04-30,2,,,,unparsed
+174981956,1229,txsb,21-90002,527,,unknown,order,order,,,6,,,,unparsed
+24532896,1041,txsb,15-34287,1262,,unknown,application_final,final,,,96,,,,unparsed
+24532896,1041,txsb,15-34287,1262,,unknown,application_final,final,,,78,,,,unparsed
+24532896,1041,txsb,15-34287,1262,,unknown,application_final,final,,,77,,,,unparsed
+24532896,1041,txsb,15-34287,1262,,unknown,application_final,final,,,122,,,,unparsed
+24532898,1041,txsb,15-34287,1260,,unknown,application_final,final,,,96,,,,unparsed
+24532898,1041,txsb,15-34287,1260,,unknown,application_final,final,,,78,,,,unparsed
+24532898,1041,txsb,15-34287,1260,,unknown,application_final,final,,,77,,,,unparsed
+32297958,1124,deb,18-10248,949,Expenses of Pachulski Stang Ziehl & Jones LLP,law_firm,order,order,2018-02-15,2018-04-30,2,,,,unparsed
+24090264,1124,deb,18-10248,292,,unknown,order,order,,,7,,,,unparsed
+99295196,1031,txsb,15-60016,411,,financial_advisor,application_interim,final,2015-05-01,2015-07-31,2,,,,unparsed
+25071443,1068,nysb,16-11390,2479,"Houlihan Lokey Capital, Inc., Financial Advisor and Investment Banker to the Official Committee of Unsecured Creditors",financial_advisor,application_final,final,2017-12-01,2017-12-31,72,,,,unparsed
+112799113,1151,txsb,19-32713,941,Perella Weinberg Partners LP,financial_advisor,order,order,2019-08-01,2019-10-08,2,,,,unparsed
+112799100,1151,txsb,19-32713,943,,law_firm,order,order,2019-08-01,2019-10-08,2,,,,unparsed
+28694298,1077,txsb,16-33590,1291,,financial_advisor,application_final,final,2016-11-01,2016-11-30,29,3289.5,15.3,role_summary_table,parsed
+28694283,1077,txsb,16-33590,1281,,law_firm,application_final,final,,,109,,,,unparsed
+28694383,1077,txsb,16-33590,1382,"Greenberg Traurig, LLP",law_firm,order,order,2016-08-05,2016-12-16,2,,,,unparsed
+28694397,1077,txsb,16-33590,1396,"Conway MacKenzie, Inc",financial_advisor,order,order,2016-08-05,2016-12-16,2,,,,unparsed
+28693922,1077,txsb,16-33590,841,,law_firm,application_interim,interim,2016-08-05,2016-08-31,239,,,,unparsed

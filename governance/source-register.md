@@ -87,8 +87,9 @@ its text is reproduced only as code definitions, with attribution.
 |---|---|
 | **Root** | `https://www.courtlistener.com/api/rest/v4/` |
 | **Endpoint used** | `/search/?type=rd` (document-level), then `https://storage.courtlistener.com/<filepath_local>` |
-| **Authentication** | **Not required** for `/search/` or for the storage PDFs. Probed unauthenticated and both returned 200 |
-| **Rate limit** | Documented as 5/min, 50/hour, 125/day for authenticated users. Measured unauthenticated: two HTTP 429s in 16 requests at 2.5-second spacing; none in 20+ requests at 8 seconds |
+| **Authentication** | **Not required** for `/search/` or for the storage PDFs; both serve anonymously. **Used anyway**, because the limit is six times higher with it. Token read from the `COURTLISTENER_TOKEN` user-scope environment variable, never from a file |
+| **Rate limit, as the server states it** | Anonymous: *"Rate limit exceeded: 50/hour"*. Authenticated: *"Rate limit exceeded: 5/min"*. Both quoted from HTTP 429 bodies on 2026-09-09. The documented 5/min · 50/hour · 125/day describes the **authenticated** tier |
+| **A measurement that was wrong** | A burst of 14 requests at 3-second spacing returned no 429, and spacing was set to 4 s on that basis. The run stopped itself after 86 requests in 25 minutes. A burst measurement says nothing about an hourly window; recorded here so it is not re-derived |
 | **Publisher** | Free Law Project. Bulk data files are marked as free of known copyright restrictions |
 
 **Retrieval date is per document**, recorded in `data/raw/recap/manifest.csv`.

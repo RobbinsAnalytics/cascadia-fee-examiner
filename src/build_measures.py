@@ -139,16 +139,43 @@ def main() -> int:
         lambda: {"apps": set(), "firms": set(), "hours": 0.0, "fees": 0.0})
     unmapped: dict[str, dict] = defaultdict(
         lambda: {"occurrences": 0, "hours": 0.0, "fees": 0.0})
+    # A firm that files its OWN UTBMS task code conforms through the codebook
+    # directly, with no firm mapping at all: code -> UTBMS name -> crosswalk ->
+    # Appendix B category. A code the 1997 set does not contain (B255, B325,
+    # P200 have all been filed) is surfaced as unmapped with the code named --
+    # that is a finding about the vocabulary, not about the firm.
+    utbms_name = {r["code"]: r["name"] for r in rows(ROOT / "data/conformed/dim_task_code.csv")
+                  if r["vocabulary"] == "UTBMS-BK-1997"}
+    code_to_ustp = {r["utbms_code"]: r["ustp_category"] for r in rows(CROSSWALK)
+                    if r["utbms_code"].strip()}
+    conformed_via_code = 0
     for r in cat_rows:
         if r["docket_entry_id"] not in scope:
             continue
-        ustp, _ = conform_category(r["filer_normalised"],
-                                   r["category_as_filed"], mapping)
+        code = (r.get("task_code_as_filed") or "").strip()
+        if code:
+            ustp = code_to_ustp.get(code, "")
+            if ustp:
+                conformed_via_code += 1
+            else:
+                label = f"{code} {r['category_as_filed']}".strip()
+                u = unmapped[label]
+                u["occurrences"] += 1
+                u["hours"] += num(r["hours"])
+                u["fees"] += num(r["fees"])
+                u["reason"] = ("filed under a task code absent from UTBMS-BK-1997"
+                               if code not in utbms_name else
+                               "UTBMS code has no Appendix B counterpart")
+                continue
+        else:
+            ustp, _ = conform_category(r["filer_normalised"],
+                                       r["category_as_filed"], mapping)
         if not ustp:
             u = unmapped[r["category_as_filed"]]
             u["occurrences"] += 1
             u["hours"] += num(r["hours"])
             u["fees"] += num(r["fees"])
+            u["reason"] = "no row in data/reference/firm_category_to_ustp.csv"
             continue
         b = by_cat[ustp]
         b["apps"].add(r["docket_entry_id"])
@@ -172,8 +199,9 @@ def main() -> int:
     write(OUT_UNMAPPED, UNMAPPED_FIELDS,
           [{"category_as_filed": k, "occurrences": v["occurrences"],
             "hours": round(v["hours"], 2), "fees": round(v["fees"], 2),
-            "reason": "no row in data/reference/firm_category_to_ustp.csv"}
+            "reason": v.get("reason", "no mapping")}
            for k, v in sorted(unmapped.items(), key=lambda t: -t[1]["fees"])])
+    print(f"  conformed via filed task code: {conformed_via_code} category rows")
 
     # ---- M-02 staffing mix ----------------------------------------------
     by_role: dict[str, dict] = defaultdict(

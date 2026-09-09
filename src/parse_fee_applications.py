@@ -62,7 +62,8 @@ ROLE_FIELDS = ["docket_entry_id", "case_primary_key", "court_id",
                "layout_family"]
 CATEGORY_FIELDS = ["docket_entry_id", "case_primary_key", "court_id",
                    "docket_number", "filer_normalised", "category_as_filed",
-                   "matter_number", "hours", "fees", "layout_family"]
+                   "task_code_as_filed", "matter_number", "hours", "fees",
+                   "layout_family"]
 APP_FIELDS = ["docket_entry_id", "case_primary_key", "court_id",
               "docket_number", "document_number", "filer_normalised",
               "professional_type", "entry_class", "application_type",
@@ -116,6 +117,15 @@ def detect_family(full: str) -> str:
         return "generic_timekeeper_table"
     if re.search(r"(?i)\[\s*matter\s+no\.?\s*\d+\s*\]", full):
         return "matter_category_prose"
+    if re.search(r"(?i)category\s+of\s*\n?\s*timekeeper", full) or \
+       re.search(r"(?i)professionals\s*\n\s*blended\s+rate", full):
+        return "role_summary_table"
+    if re.search(r"(?im)^\s*total\s+(partners?|associates?|paraprofessionals?)\s*$",
+                 full):
+        return "role_subtotal_rows"
+    if re.search(r"(?im)^\s*task\s+code\s*$", full) and \
+       re.search(r"(?m)^\s*[BLPCE]\d{3}\s*$", full):
+        return "utbms_task_code_table"
     return ""
 
 
@@ -171,6 +181,133 @@ def parse_attorney_table(lines: list[str], rules: list[tuple]) -> list[dict]:
     return out
 
 
+def _take_numbers(window: list[str], n: int = 3) -> list[tuple[float, bool]]:
+    """The next n numeric cells, each tagged with whether it carried a $ sign."""
+    out = []
+    for w in window:
+        m = re.fullmatch(r"\s*(\$)?\s*([\d,]+(?:\.\d{1,2})?)\s*", w)
+        if m:
+            out.append((to_float(m.group(2)), bool(m.group(1))))
+            if len(out) == n:
+                break
+        elif out:
+            # a non-numeric cell after numbers have started ends the row
+            break
+    return out
+
+
+def _assign_hours_fees_rate(nums: list[tuple[float, bool]]) -> tuple | None:
+    """Three numbers in an unknown order -> (hours, fees, rate), self-checked.
+
+    Firms print the same three figures in different column orders. Rather than
+    one parser per order, identify them by shape: the rate is the dollar figure
+    at or under 5,000; fees is the largest; hours is what remains. Then REQUIRE
+    fees / hours to land within 15% of the rate -- a row that fails that
+    identity is not a row this function understands, and is dropped rather
+    than guessed at.
+    """
+    if len(nums) < 3:
+        return None
+    vals = [v for v, _ in nums]
+    dollar = [v for v, d in nums if d]
+    rate_c = [v for v in (dollar or vals) if 50 <= v <= 5000]
+    if not rate_c:
+        return None
+    rate = min(rate_c)
+    fees = max(vals)
+    rest = [v for v in vals if v not in (rate, fees)]
+    if not rest or fees <= rate:
+        return None
+    hours = rest[0]
+    if not hours or not (0.05 <= hours <= 50000):
+        return None
+    implied = fees / hours
+    if abs(implied - rate) / rate > 0.15:
+        return None
+    return hours, fees, rate
+
+
+def parse_role_summary_table(lines: list[str], rules: list[tuple]) -> list[dict]:
+    """Role-level rows the FIRM already aggregated -- the best case for this
+    module, because there is no name anywhere in the table to refuse.
+
+        Partner               3,362.50   $2,798,658.75   $875.00     (one firm)
+        Partners and Counsel  $792.07    4,419.20        3,500,311   (another)
+    """
+    label_rx = re.compile(
+        r"(?i)^\s*(partners?(?:\s+and\s+counsel)?|of\s+counsel|counsel|"
+        r"associates?|paralegals?(?:/legal\s+support)?|paraprofessionals?"
+        r"(?:\s+and\s+other\s+staff)?|legal\s+assistants?)\s*$")
+    out = []
+    for i, ln in enumerate(lines):
+        if not label_rx.match(ln):
+            continue
+        got = _assign_hours_fees_rate(_take_numbers(lines[i + 1:i + 8]))
+        if not got:
+            continue
+        hours, fees, rate = got
+        out.append({"role": to_role(ln, rules), "hours": hours, "fees": fees,
+                    "rate": rate})
+    return out
+
+
+def parse_role_subtotal_rows(lines: list[str], rules: list[tuple]) -> list[dict]:
+    """'TOTAL ASSOCIATE / 8,219.7 / $8,355,690.25' subtotal rows beneath a
+    per-person table. The per-person rows above them are never read: the
+    subtotal is the firm's own aggregation and it is all this needs.
+    """
+    rx = re.compile(r"(?i)^\s*total\s+(partners?|associates?|of\s+counsel|counsel|"
+                    r"paraprofessionals?|paralegals?|client\s+specialists?|"
+                    r"legal\s+assistants?)\s*$")
+    out = []
+    for i, ln in enumerate(lines):
+        m = rx.match(ln)
+        if not m:
+            continue
+        nums = _take_numbers(lines[i + 1:i + 6], n=2)
+        if len(nums) < 2:
+            continue
+        a, b = nums[0][0], nums[1][0]
+        hours, fees = (a, b) if b > a else (b, a)
+        if not hours or not (50 <= fees / hours <= 5000):
+            continue
+        out.append({"role": to_role(m.group(1), rules), "hours": hours,
+                    "fees": fees, "rate": round(fees / hours, 2)})
+    return out
+
+
+def parse_utbms_task_code_table(lines: list[str]) -> list[dict]:
+    """A category summary keyed by the firm's own UTBMS task code:
+
+        B110 / Case Administration / 1,156.40 / $535.75 / $619,544.00
+
+    The code is captured verbatim. Where it exists in dim_task_code it conforms
+    without any firm mapping at all; where it does not -- B255, B325 and P200
+    are real examples -- that is a finding about the vocabulary, surfaced
+    downstream rather than coerced.
+    """
+    code_rx = re.compile(r"^\s*([BLPCE]\d{3})\s*$")
+    num_rx = re.compile(r"\s*\$?\s*[\d,]+(?:\.\d{1,2})?\s*")
+    out = []
+    for i, ln in enumerate(lines):
+        m = code_rx.match(ln)
+        if not m:
+            continue
+        name_parts, j = [], i + 1
+        while j < len(lines) and j < i + 6 and not num_rx.fullmatch(lines[j]):
+            if lines[j].strip():
+                name_parts.append(lines[j].strip())
+            j += 1
+        got = _assign_hours_fees_rate(_take_numbers(lines[j:j + 8]))
+        if not got or not name_parts:
+            continue
+        hours, fees, rate = got
+        out.append({"category_as_filed": " ".join(" ".join(name_parts).split()),
+                    "task_code_as_filed": m.group(1), "matter_number": "",
+                    "fees": fees, "hours": hours})
+    return out
+
+
 def parse_matter_categories(full: str) -> list[dict]:
     """The inline project-category summary.
 
@@ -193,6 +330,7 @@ def parse_matter_categories(full: str) -> list[dict]:
         name = " ".join(m.group(1).split())
         out.append({
             "category_as_filed": name,
+            "task_code_as_filed": "",
             "matter_number": m.group(2),
             "fees": to_float(m.group(3)),
             "hours": to_float(m.group(4)),
@@ -229,9 +367,15 @@ def application_type(entry_class: str, full: str) -> str:
         return "order"
     if entry_class == "application_amended":
         return "amended"
-    if re.search(r"(?i)\bfinal\s+fee\s+application\b", full[:4000]):
-        return "final"
     if entry_class == "application_final":
+        return "final"
+    # The docket's own classification is trusted over the body text. A
+    # case-insensitive scan of the first pages for "final fee application"
+    # typed genuinely interim applications as final -- boilerplate mentions
+    # the phrase constantly. Only an upper-case caption line that says the
+    # application is ALSO final overrides the docket.
+    if re.search(r"(?m)^[^\n]*(?:\bAND FINAL\b[^\n]*APPLICATION|"
+                 r"APPLICATION[^\n]*\bAND FINAL\b)", full[:3000]):
         return "final"
     return "interim"
 
@@ -281,12 +425,23 @@ def main() -> int:
 
         family = detect_family(full)
         lines = [ln.rstrip() for ln in full.split("\n")]
-        roles = (parse_attorney_table(lines, rules)
-                 if family in {"exhibit_a_attorney_table",
-                               "generic_timekeeper_table"} else [])
-        cats = parse_matter_categories(full)
-        if cats and not family:
-            family = "matter_category_prose"
+        # Try the aggregated forms first: they carry no names at all.
+        # Each candidate parser runs and the fullest reading wins. Stopping at
+        # the first non-empty result let one stray row from the summary parser
+        # pre-empt eight subtotal rows in the same document.
+        candidates = [parse_role_summary_table(lines, rules),
+                      parse_role_subtotal_rows(lines, rules)]
+        if family in {"exhibit_a_attorney_table", "generic_timekeeper_table"}:
+            candidates.append(parse_attorney_table(lines, rules))
+        roles = max(candidates, key=len) if any(candidates) else []
+        cats = parse_utbms_task_code_table(lines) or parse_matter_categories(full)
+        if not family:
+            if cats and cats[0].get("task_code_as_filed"):
+                family = "utbms_task_code_table"
+            elif cats:
+                family = "matter_category_prose"
+            elif roles:
+                family = "role_summary_table"
 
         # AGGREGATE BEFORE WRITING. Nothing per-person is constructed.
         by_role: dict[str, dict] = defaultdict(

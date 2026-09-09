@@ -256,10 +256,23 @@ def check_organisation_columns() -> None:
     """
     print("\nF. Organisation columns -- values, not just headers")
     spec = json.loads(ALLOWLIST.read_text(encoding="utf-8"))
+    # Docket-caption markers only. A bare date is NOT one of them here: the
+    # database annotates a replaced claims agent as "(terminated 8/12/2011;
+    # replaced by ...)" inside the firm field itself, and that is publisher
+    # text about an organisation, not caption run-on. The extractor keeps its
+    # date test because ITS input is caption text; this gate's input is values.
     noise = re.compile(
         r"(?i)\(Entered:|Hearing scheduled|Filed by|\bDoc\b|#\s*\d|"
-        r"\bNotice\)|\bObjections? due|\d{1,2}/\d{1,2}/\d{2,4}")
+        r"\bNotice\)|\bObjections? due")
     person = re.compile(r"^[A-Z][a-z]+,\s*[A-Z][a-z]+\.?$")
+    # "Wellman, Inc." is shaped like "Lastname, Firstname" and is a company.
+    # The first run of this check failed 40-odd debtors on exactly that, so the
+    # person shape is only decisive where no organisational cue is present.
+    org_cue = re.compile(
+        r"(?i)\b(l\.?l\.?p|l\.?l\.?c|p\.?l\.?l\.?c|p\.?c|p\.?a|plc|ltd|inc|"
+        r"incorporated|corp|corporation|company|co\.|chartered|group|partners|"
+        r"associates|consulting|advisors|advisers|holdings|trust|bank|fund|"
+        r"bancorp|energy|capital|industries|international|&)\b|&")
     checked = offenders = 0
     for rel, table in spec["tables"].items():
         path = ROOT / rel
@@ -275,7 +288,8 @@ def check_organisation_columns() -> None:
                 if not v:
                     continue
                 checked += 1
-                if noise.search(v) or person.fullmatch(v):
+                if noise.search(v) or (person.fullmatch(v)
+                                       and not org_cue.search(v)):
                     offenders += 1
                     fail(f"{rel}.{c}: value is not an organisation -- "
                          f"{v[:60]!r}")

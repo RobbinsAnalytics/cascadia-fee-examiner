@@ -61,6 +61,27 @@ protected_paths = [
   # stage 3a
   "data/reference/entry_classifier.csv",
   "data/reference/professional_type.csv",
+  "data/reference/title_to_role.csv",
+  "data/reference/firm_category_to_ustp.csv",
+  "data/reference/firm_alias_overrides.csv",
+  "data/raw/recap/manifest.csv",
+  "data/conformed/coverage_by_case.csv",
+  "data/conformed/m04_coverage.csv",
+  # stage 3b
+  "data/conformed/fact_application.csv",
+  "data/conformed/fact_role_summary.csv",
+  "data/conformed/fact_category_summary.csv",
+  "data/conformed/parse_status.csv",
+  "data/conformed/m01_blended_rate_by_category.csv",
+  "data/conformed/m02_staffing_mix.csv",
+  "data/conformed/m03_rate_progression.csv",
+  "data/conformed/m05_fee_concentration.csv",
+  "data/conformed/unmapped_categories.csv",
+  "data/conformed/measures_manifest.json",
+  # stage 4
+  "data/conformed/dim_firm.csv",
+  "data/conformed/bridge_firm_alias.csv",
+  "data/conformed/unresolved_firms.csv",
 ]
 
 # DELIBERATELY NOT PROTECTED, each with the reason, so that absence from the

@@ -1,0 +1,62 @@
+docket_entry_id,case_primary_key,court_id,docket_number,filer_normalised,category_as_filed,task_code_as_filed,matter_number,hours,fees,layout_family
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Chapter 11 Bankruptcy Filing,,19,164.7,119263.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Case Administration,,20,389.4,252273.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Disclosure Statement, Plan, Confirmation",,21,1707.9,1488203.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,K&E Retention & Fee Applications,,22,297.1,170295.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Non-K&E Retention & Fee Applications,,23,258.6,164689.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,SOFAs and Schedules,,24,113.8,74050.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,U.S. Trustee Issues,,25,39.4,28350.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Business Operations,,26,35.5,29965.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Corporate Governance & Securities Issues,,27,83.2,79117.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Cash Management,,28,3.3,2986.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"DIP, Cash Collateral, Exit Financing",,29,778.0,564579.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Employee Issues,,30,101.6,74613.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Insurance and Related Matters,,31,26.5,24216.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Vendor and Supplier Issues,,32,23.0,21074.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Utilities,,33,33.6,22283.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Creditor Communications,,34,61.4,58092.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Tax Issues,,35,64.3,69448.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Adversary Proceedings, Contested Matters",,36,2400.5,1932719.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Automatic Stay Issues,,37,203.6,160854.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Hearings,,39,333.4,207102.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Claims Administration and Objections,,40,446.7,368748.5,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Executory Contracts & Unexpired Leases,,41,413.6,322588.0,exhibit_a_attorney_table
+24590634,1105,nysb,17-22770,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Use, Sale, or Lease of Property",,42,1262.5,986175.5,exhibit_a_attorney_table
+24732795,1099,txnb,17-31432,,Case Administration,B110,,1156.4,619544.0,role_summary_table
+24732795,1099,txnb,17-31432,,Asset Analysis and Recovery,B120,,139.4,104359.0,role_summary_table
+24732795,1099,txnb,17-31432,,Asset Disposition,B130,,9.0,6795.0,role_summary_table
+24732795,1099,txnb,17-31432,,Relief from Stay,B140,,14.2,10471.0,role_summary_table
+24732795,1099,txnb,17-31432,,Meetings of and Communications with Creditors,B150,,281.5,200778.5,role_summary_table
+24732795,1099,txnb,17-31432,,Fee/Employment Applications,B160,,247.1,163365.5,role_summary_table
+24732795,1099,txnb,17-31432,,Fee/Employment Objections,B170,,37.2,24793.5,role_summary_table
+24732795,1099,txnb,17-31432,,Avoidance Action Analysis,B180,,2.9,2151.5,role_summary_table
+24732795,1099,txnb,17-31432,,Assumption/Rejection of Leases and Contracts,B185,,1277.8,820730.5,role_summary_table
+24732795,1099,txnb,17-31432,,"Other Contested Matters, including Preparation of Motions",B190,,483.5,313993.5,role_summary_table
+24732795,1099,txnb,17-31432,,Business Operations,B210,,26.2,19780.5,role_summary_table
+24732795,1099,txnb,17-31432,,"DIP Financing, Financing, and Cash Collections",B230,,228.7,155573.0,role_summary_table
+24732795,1099,txnb,17-31432,,Tax Issues,B240,,169.4,129838.5,role_summary_table
+24732795,1099,txnb,17-31432,,Real Estate,B250,,23.1,16857.0,role_summary_table
+24732795,1099,txnb,17-31432,,Valuation/Appraisal of Assets,B255,,295.5,221744.0,role_summary_table
+24732795,1099,txnb,17-31432,,Board of Directors Matters,B260,,24.4,21649.0,role_summary_table
+24732795,1099,txnb,17-31432,,Corporate Finance,B265,,55.0,32175.0,role_summary_table
+24732795,1099,txnb,17-31432,,Claims Administration and Objections,B310,,104.0,67469.0,role_summary_table
+24732795,1099,txnb,17-31432,,"Plan and Disclosure Statement, including Business Plan",B320,,899.1,634206.5,role_summary_table
+24732795,1099,txnb,17-31432,,Disclosure Statement and Plan Objections and Negotiations,B325,,537.7,366968.0,role_summary_table
+24732795,1099,txnb,17-31432,,"Legal E-Discovery Analysis and Advice,",C300,,171.4,65279.0,role_summary_table
+24732795,1099,txnb,17-31432,,Non-Bankruptcy Fact Investigation & Development,L110,,11.1,7500.0,role_summary_table
+24732795,1099,txnb,17-31432,,Analysis/Strategy,L120,,52.9,41246.0,role_summary_table
+24732795,1099,txnb,17-31432,,Consultants/Expert Witness,L130,,4.9,3006.0,role_summary_table
+24732795,1099,txnb,17-31432,,"Settlement & Mediation, Including Preparation, Negotiations, and Drafting",L160,,192.6,147963.5,role_summary_table
+24732795,1099,txnb,17-31432,,Class Actions,L260,,171.4,98804.5,role_summary_table
+24732795,1099,txnb,17-31432,,Written Discovery,L310,,124.6,75398.0,role_summary_table
+24732795,1099,txnb,17-31432,,Document Production,L320,,35.7,19734.5,role_summary_table
+24732795,1099,txnb,17-31432,,Depositions,L330,,236.4,157762.5,role_summary_table
+24732795,1099,txnb,17-31432,,Other Discovery,L390,,1039.2,436873.5,role_summary_table
+24732795,1099,txnb,17-31432,,"Fact Witnesses, Including Preparation and Proffers",L410,,114.8,82777.5,role_summary_table
+24732795,1099,txnb,17-31432,,Hearing Preparation and Support,L440,,350.9,255502.0,role_summary_table
+24732795,1099,txnb,17-31432,,Hearing Attendance,L450,,363.8,249614.5,role_summary_table
+24732795,1099,txnb,17-31432,,Corporate Finance Paralegal Work,P200,,11.7,5553.0,role_summary_table
+24732795,1099,txnb,17-31432,,Corporate Review (Non-Bankruptcy),P210,,198.9,111602.0,role_summary_table
+24732795,1099,txnb,17-31432,,Regulatory Matters and Reviews,P270,,286.3,131953.5,role_summary_table
+24732795,1099,txnb,17-31432,,Equity Committee Discovery and Negotiations,P280,,322.4,228402.5,role_summary_table
+24732795,1099,txnb,17-31432,,Corporate Document Preparation and Filing,P400,,7.3,2336.0,role_summary_table
