@@ -51,9 +51,13 @@ protected_paths = [
   "data/raw/reference/fr_2013-14323_appendix_b.pdf.sha256",
   "data/raw/reference/aba_utbms_bankruptcy_codes_1997.xlsx",
   "data/raw/reference/aba_utbms_bankruptcy_codes_1997.xlsx.sha256",
+  # stage 1
   "data/reference/excluded_sic.csv",
   "data/reference/dim_court.csv",
   "data/conformed/dim_case.csv",
+  # stage 2
+  "data/reference/crosswalk_task_codes.csv",
+  "data/conformed/dim_task_code.csv",
 ]
 
 # DELIBERATELY NOT PROTECTED, each with the reason, so that absence from the

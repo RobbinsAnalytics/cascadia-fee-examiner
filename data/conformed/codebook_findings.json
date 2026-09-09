@@ -1,0 +1,78 @@
+{
+  "generated_utc": "2026-09-09T21:13:59+00:00",
+  "utbms_bk_1997_task_codes": 21,
+  "utbms_bk_1997_phases": [
+    "B100",
+    "B200",
+    "B300",
+    "B400"
+  ],
+  "ustp_appb_2013_categories": 22,
+  "ustp_category_names": [
+    "Asset Analysis and Recovery",
+    "Asset Disposition",
+    "Assumption and Rejection of Leases and Contracts",
+    "Avoidance Action Analysis",
+    "Budgeting (Case)",
+    "Business Operations",
+    "Case Administration",
+    "Claims Administration and Objections",
+    "Corporate Governance and Board Matters",
+    "Employee Benefits and Pensions",
+    "Employment and Fee Applications",
+    "Employment and Fee Application Objections",
+    "Financing and Cash Collateral",
+    "Litigation",
+    "Meetings and Communications with Creditors",
+    "Non-Working Travel",
+    "Plan and Disclosure Statement",
+    "Real Estate",
+    "Relief from Stay and Adequate Protection",
+    "Reporting",
+    "Tax",
+    "Valuation"
+  ],
+  "exhibit_d1_crosscheck": {
+    "table_found": true,
+    "absent_from_table": [],
+    "present_but_out_of_order": [],
+    "agrees": true
+  },
+  "notice_claim_all_but_one": {
+    "claim": "of the seven tasks the notice says it extracted, all but one are in the UTBMS bankruptcy code set",
+    "extracted_tasks": [
+      "Assumption and Rejection of Leases and Contracts",
+      "Avoidance Action Analysis",
+      "Corporate Governance and Board Matters",
+      "Litigation",
+      "Non-Working Travel",
+      "Real Estate",
+      "Reporting"
+    ],
+    "extracted_tasks_without_a_utbms_code": [
+      "Reporting"
+    ],
+    "claim_holds": true
+  },
+  "crosswalk": {
+    "rows": 22,
+    "by_match_type": {
+      "broader": 2,
+      "exact": 9,
+      "none": 3,
+      "rename": 8
+    },
+    "no_utbms_counterpart": [
+      "Budgeting (Case)",
+      "Reporting",
+      "Valuation"
+    ],
+    "categories_not_in_crosswalk": [],
+    "crosswalk_rows_matching_no_category": [],
+    "crosswalk_rows_citing_an_unknown_utbms_code": [],
+    "utbms_codes_with_no_ustp_counterpart": [
+      "B410",
+      "B420"
+    ]
+  }
+}
