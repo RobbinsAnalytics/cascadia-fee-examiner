@@ -1,0 +1,24 @@
+firm_pattern,category_as_filed,ustp_category,match_type,note
+.*,Case Administration,Case Administration,exact,
+.*,Claims Administration and Objections,Claims Administration and Objections,exact,
+.*,Business Operations,Business Operations,exact,
+.*,"Disclosure Statement, Plan, Confirmation",Plan and Disclosure Statement,equivalent,Same scope under a different name.
+.*,Tax Issues,Tax,equivalent,
+.*,Creditor Communications,Meetings and Communications with Creditors,equivalent,
+.*,Automatic Stay Issues,Relief from Stay and Adequate Protection,equivalent,
+.*,Executory Contracts & Unexpired Leases,Assumption and Rejection of Leases and Contracts,equivalent,
+.*,"Use, Sale, or Lease of Property",Asset Disposition,equivalent,Section 363 work. The USTP category explicitly includes leases under section 365 matters.
+.*,"Adversary Proceedings, Contested Matters",Litigation,equivalent,"Matches the USTP category's full name, which is Litigation: Contested Matters and Adversary Proceedings."
+.*,Corporate Governance & Securities Issues,Corporate Governance and Board Matters,broader,"The firm's category adds securities work, which the USTP category does not name. Mapped rather than split because the filed figure is not decomposable."
+.*,"DIP, Cash Collateral, Exit Financing",Financing and Cash Collateral,broader,Exit financing is post-confirmation and the USTP category does not say so either way.
+.*,Cash Management,Financing and Cash Collateral,broader,"Debatable. Cash management motions are treasury mechanics rather than borrowing, and Business Operations is the arguable alternative. Recorded as the weaker of the two mappings in this file."
+.*,Employee Issues,Employee Benefits and Pensions,broader,"The firm's category covers wages, severance and retention as well as benefits and pensions."
+.*,K&E Retention & Fee Applications,Employment and Fee Applications,exact,
+.*,Non-K&E Retention & Fee Applications,Employment and Fee Applications,broader,"Work on OTHER professionals' retention and fees. The USTP set splits its own applications from objections to others', and this firm category is neither cleanly -- it is preparation and review rather than objection. Mapped to the applications category with the imprecision stated."
+.*,Chapter 11 Bankruptcy Filing,Case Administration,residual,"Petition and first-day work. The USTP list has no category for it, so it falls to the residual one -- ""coordination and compliance activities not specifically covered by another category."""
+.*,SOFAs and Schedules,Case Administration,residual,Statements of financial affairs and schedules. Named explicitly in the UTBMS B110 definition and in no USTP category.
+.*,U.S. Trustee Issues,Case Administration,residual,Reports to and contacts with the U.S. Trustee. Named in UTBMS B110 and in no USTP category.
+.*,Hearings,Case Administration,residual,No USTP category names hearing attendance; it is spread across whichever category the hearing concerned.
+.*,Insurance and Related Matters,Business Operations,residual,No USTP insurance category. Business Operations is the nearest and is itself a catch-all for debtor-in-possession operating issues.
+.*,Vendor and Supplier Issues,Business Operations,residual,Named in the USTP Business Operations definition as an example rather than as its own category.
+.*,Utilities,Business Operations,residual,Section 366 utility work. Named in no USTP category.

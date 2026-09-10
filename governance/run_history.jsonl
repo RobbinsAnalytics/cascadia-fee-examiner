@@ -1,0 +1,3 @@
+{"utc": "2026-09-09T22:16:52+00:00", "cases_searched": 27, "documents_stored": 41, "parsed": 1, "match_rate": 0.3333, "gates_passed": false}
+{"utc": "2026-09-09T22:24:15+00:00", "cases_searched": 33, "documents_stored": 49, "parsed": 9, "match_rate": 0.3125, "gates_passed": true}
+{"utc": "2026-09-10T00:49:45+00:00", "cases_searched": 48, "documents_stored": 63, "parsed": 11, "match_rate": 0.36, "gates_passed": true}

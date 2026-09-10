@@ -1,0 +1,23 @@
+ustp_category,utbms_code,utbms_name,match_type,note
+Asset Analysis and Recovery,B120,Asset Analysis and Recovery,exact,Same name and same stated scope in both sources.
+Asset Disposition,B130,Asset Disposition,exact,"USTP adds ""leases (section 365 matters)"" to the scope; UTBMS says ""sales, abandonment and transaction work"". Same category, fuller wording."
+Assumption and Rejection of Leases and Contracts,B185,Assumption/Rejection of Leases and Contracts,rename,Punctuation only. Named by the notice as one of the seven tasks it extracted and separately categorized.
+Avoidance Action Analysis,B180,Avoidance Action Analysis,exact,Named by the notice as one of the seven extracted tasks.
+Budgeting (Case),,,none,"No UTBMS counterpart. Budgeting is the Appendix B guidelines' own instrument -- Exhibit C-1 is a budget by project category -- so a category for the work of preparing it did not exist in a 1997 billing vocabulary."
+Business Operations,B210,Business Operations,exact,
+Case Administration,B110,Case Administration,exact,"Scope differs in kind, not in name: UTBMS enumerates the work (schedules, statements, U.S. Trustee reports), USTP defines it residually as ""coordination and compliance activities not specifically covered by another category"". The residual definition is the reason this category absorbs whatever the others do not."
+Claims Administration and Objections,B310,Claims Administration and Objections,exact,
+Corporate Governance and Board Matters,B260,Board of Directors Matters,broader,"USTP covers corporate governance advice, trustee, examiner and CRO issues, and corporate documents, as well as board meetings. Named by the notice as one of the seven extracted tasks."
+Employee Benefits and Pensions,B220,Employee Benefits/Pensions,rename,Punctuation only.
+Employment and Fee Applications,B160,Fee/Employment Applications,rename,Word order and punctuation only.
+Employment and Fee Application Objections,B170,Fee/Employment Objections,rename,Word order and punctuation only.
+Financing and Cash Collateral,B230,Financing/Cash Collections,rename,"The UTBMS name reads ""Cash Collections"" where the USTP reads ""Cash Collateral"". Recorded rather than corrected: this crosswalk maps what the two documents say, and a mapping file that silently repairs its own source is a mapping file nobody can audit."
+Litigation,B190,Other Contested Matters (excluding assumption/rejection motions),broader,"USTP's full name is ""Litigation: Contested Matters and Adversary Proceedings (not otherwise within a specific project category)"" and it asks that each be identified separately by caption and adversary or docket number. Broader than B190 in that it reaches adversary proceedings, which the UTBMS bankruptcy set sends to the separate litigation code set. Named by the notice as one of the seven extracted tasks."
+Meetings and Communications with Creditors,B150,Meetings of and Communications with Creditors,rename,Wording only.
+Non-Working Travel,B195,Non-Working Travel,exact,Named by the notice as one of the seven extracted tasks.
+Plan and Disclosure Statement,B320,Plan and Disclosure Statement (including Business Plan),exact,
+Real Estate,B250,Real Estate,exact,Named by the notice as one of the seven extracted tasks.
+Relief from Stay and Adequate Protection,B140,Relief from Stay/Adequate Protection Proceedings,rename,Punctuation only.
+Reporting,,,none,"No UTBMS counterpart. THIS IS THE ONE. The notice states that the tasks it extracted are ""all but one of which is included in the long-established Uniform Task Based Management System"" bankruptcy code set, and names seven; six of the seven map to a B-code above and this one does not. src/build_codebook.py checks that claim rather than repeating it."
+Tax,B240,Tax Issues,rename,Wording only.
+Valuation,,,none,"No UTBMS counterpart. Not among the seven tasks the notice says it extracted, so it is a category the guidelines carry independently of that exercise."

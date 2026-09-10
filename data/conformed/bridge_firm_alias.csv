@@ -1,0 +1,10 @@
+firm_key,brd_name,caption_name,court_id,docket_number,match_rule,matched_tokens
+greenberg-traurig,Greenberg Traurig,"Greenberg Traurig, LLP",txsb,16-33590,token_subset,greenberg traurig
+kirkland-ellis,Kirkland Ellis,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,deb,20-11177,token_subset,ellis kirkland
+kirkland-ellis,Kirkland Ellis,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,nysb,17-22770,token_subset,ellis kirkland
+kirkland-ellis,Kirkland Ellis,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,txsb,20-33233,token_subset,ellis kirkland
+kirkland-ellis,Kirkland Ellis,Kirkland & Ellis LLP and Kirland & Ellis International LLP,txsb,20-33233,token_subset,ellis kirkland
+kramer-levin,Kramer Levin,Kramer Levin Naftalis & Frankel LLP,txsb,20-33568,token_subset,kramer levin
+mcdermott-will,McDermott Will,McDermott Will & Emery LLP,nysb,20-22637,token_subset,mcdermott will
+pachulski-stang,Pachulski Stang,Expenses of Pachulski Stang Ziehl & Jones LLP,deb,18-10248,token_subset,pachulski stang
+skadden-arps,Skadden Arps,"Skadden, Arps, Slate, Meagher & Flom LLP",deb,22-10426,token_subset,arps skadden

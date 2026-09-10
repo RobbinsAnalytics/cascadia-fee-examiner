@@ -1,0 +1,96 @@
+{
+  "built_utc": "2026-09-10T00:49:12+00:00",
+  "spine_as_of_date": "2023-01-12",
+  "corpus_retrieved": "per document; see data/raw/recap/manifest.csv",
+  "measures": {
+    "M-04": {
+      "rows": 17,
+      "columns": [
+        "grouping",
+        "group_value",
+        "cases",
+        "cases_with_a_docket",
+        "cases_with_any_stored_document",
+        "cases_complete_enumeration",
+        "applications_listed",
+        "documents_stored",
+        "case_reach_rate",
+        "document_reach_rate"
+      ],
+      "cases_in_population": 216,
+      "cases_searched": 48,
+      "cases_complete_enumeration": 42,
+      "cases_truncated": 6,
+      "cases_with_any_stored_document": 22,
+      "case_reach_rate": "0.4583",
+      "document_reach_rate": "0.0222"
+    },
+    "_scope": {
+      "rule": "law-firm, single-period interim applications",
+      "in_scope": 3,
+      "excluded_by_type": {
+        "final": 7,
+        "amended": 0,
+        "order": 0
+      }
+    },
+    "M-01": {
+      "rows": 0,
+      "columns": [
+        "ustp_category",
+        "applications",
+        "firms",
+        "hours",
+        "fees",
+        "blended_rate",
+        "suppressed"
+      ],
+      "applications_in_scope": 3,
+      "categories_unmapped": 0,
+      "min_applications_per_cell": 3
+    },
+    "M-02": {
+      "rows": 4,
+      "columns": [
+        "role",
+        "applications",
+        "firms",
+        "timekeepers",
+        "hours",
+        "fees",
+        "hours_share",
+        "fees_share",
+        "rate_min",
+        "rate_max"
+      ],
+      "total_hours": 6768.85,
+      "total_fees": 4480041.5
+    },
+    "M-03": {
+      "rows": 0,
+      "columns": [
+        "court_id",
+        "docket_number",
+        "filer_normalised",
+        "role",
+        "applications",
+        "first_rate_max",
+        "last_rate_max",
+        "change_absolute",
+        "change_pct"
+      ]
+    },
+    "M-05": {
+      "rows": 0,
+      "columns": [
+        "court_id",
+        "docket_number",
+        "filer_normalised",
+        "categories",
+        "fees_total",
+        "top3_fees",
+        "top3_share"
+      ]
+    }
+  }
+}

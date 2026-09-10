@@ -1,0 +1,60 @@
+{
+  "script": "src/build_spine.py",
+  "started_utc": "2026-09-09T21:03:59+00:00",
+  "finished_utc": "2026-09-09T21:03:59+00:00",
+  "snapshot": {
+    "path": "data/raw/brd/brd_cases_table.zip",
+    "member": "Florida-UCLA-LoPucki Bankruptcy Research Database 1-12-2023.csv",
+    "sha256": "03a17b10802b26eefce1d30a4dd45e774b3a252a16ad8fae60116185d97dfe70",
+    "as_of_date": "2023-01-12",
+    "as_of_date_meaning": "publisher's release date for the frozen snapshot"
+  },
+  "population": {
+    "rows_in_snapshot": 1218,
+    "rows_after_subject_matter_filter": 1123,
+    "excluded_sic_48": 95,
+    "appendix_b_era_cases": 216,
+    "era_meets_threshold": 168,
+    "era_threshold_unknown": 44,
+    "courts": 67
+  },
+  "checks": [
+    {
+      "check": "allow-listed columns present",
+      "value": 0,
+      "expectation": "0",
+      "passed": true
+    },
+    {
+      "check": "no person column in the allow-list",
+      "value": 0,
+      "expectation": "0",
+      "passed": true
+    },
+    {
+      "check": "telecom (SIC 48) rows excluded",
+      "value": 95,
+      "expectation": ">0",
+      "passed": true
+    },
+    {
+      "check": "no SIC 48 row survives",
+      "value": 0,
+      "expectation": "0",
+      "passed": true
+    },
+    {
+      "check": "every row has a court_id",
+      "value": 0,
+      "expectation": "0",
+      "passed": true
+    },
+    {
+      "check": "Appendix B-era cases present",
+      "value": 216,
+      "expectation": ">0",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,5 @@
+role,applications,firms,timekeepers,hours,fees,hours_share,fees_share,rate_min,rate_max
+associate,1,1,1,3171.65,1531831.25,0.4686,0.3419,481.58,481.58
+of_counsel,1,1,1,121.0,85552.5,0.0179,0.0191,825.0,825.0
+paraprofessional,3,1,5,113.7,63999.0,0.0168,0.0143,200.0,545.0
+partner,1,1,1,3362.5,2798658.75,0.4968,0.6247,875.0,875.0

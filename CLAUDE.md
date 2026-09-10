@@ -75,6 +75,25 @@ non-zero means publish nothing, commit nothing.
    `data/reference/entry_classifier.csv` and its unclassified rate is published.
    Never filter these inline in a script.
 
+## Never run `reclassify.py` while `pull_fee_applications.py` is running
+
+The puller loads the corpus manifest into memory at start and rewrites the
+whole file after every stored document. `reclassify.py` corrects the same
+file in place. Run concurrently, the puller's stale in-memory copy overwrites
+every correction within minutes, silently — this happened on 2026-09-09 and
+put a refused filer string back into a working table three times. Stop the
+puller, then reclassify. The acquisition is resumable, so stopping it costs
+nothing.
+
+## The docket's classification of a document is not the document's
+
+A docket entry described as an interim application was, on its own first page,
+a "FIRST AND FINAL FEE APPLICATION". The parser trusts the docket's class
+except where the document's upper-case caption says it is also final, and
+that override is deliberate: a final application re-presents every interim
+period, so mistyping one as interim double-counts. Five of the first eight
+parsed applications were finals.
+
 ## Claims-agent sites are open to a reader and closed to us
 
 Kroll's and Epiq's terms of use both make filed papers "open to examination …

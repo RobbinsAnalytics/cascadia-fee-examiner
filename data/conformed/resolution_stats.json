@@ -1,0 +1,14 @@
+{
+  "generated_utc": "2026-09-10T00:49:12+00:00",
+  "caption_firm_pairs": 25,
+  "resolved": 9,
+  "unresolved": 16,
+  "match_rate": 0.36,
+  "unresolved_rate": 0.64,
+  "by_rule": {
+    "token_subset": 9
+  },
+  "single_token_matches_refused": 0,
+  "overrides_used": 0,
+  "distinct_firms": 6
+}

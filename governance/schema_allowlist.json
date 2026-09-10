@@ -1,0 +1,437 @@
+{
+  "_what_this_is": "The declared header of every table this repo commits. src/validate.py compares each committed table against its entry here and exits non-zero on any difference, including an ADDED column. This is the person-name control's checking half; the enforcing half is that every writer in src/ emits an allow-list rather than a source's whole row, so a new upstream field cannot arrive in an output at all. Both halves are needed: the writer stops the common case, this stops a writer being changed without the change being noticed.",
+  "_why_a_publish_gate_and_not_a_git_hook": "The canonical .githooks/pre-commit runs exactly two gates and ends in `exec`; it is marked 'Never edit' and its bytes are hashed by the estate's drift check, so a third gate cannot be chained without creating drift. A PreToolUse hook was considered and rejected: SESSION-RULES rule 3 and the starter kit both record that a PreToolUse gate is handed the index as it stood BEFORE the tool call, so staging and committing inside one call passes a gate that already read the index -- which is precisely why the whitespace check was moved OUT of PreToolUse and into a git hook. Repeating that shape would produce a control that reports success and enforces nothing. So this runs in src/validate.py, which exits non-zero and stops the build. The absence of an extension point in the canonical hook is reported as a build-forward candidate for cascadia-standards, not worked around here.",
+  "_content_class": {
+    "organisation": "Names a company, law firm, court or agency -- a party to a public filing, not a person. An eponymous firm name is an organisation.",
+    "person": "Names a natural person. NO COLUMN MAY DECLARE THIS. Its presence in this file is itself a validation failure, so the forbidden class is nameable rather than merely absent.",
+    "identifier": "A key, code or docket number.",
+    "quantity": "A number.",
+    "date": "A date or a year.",
+    "controlled": "A value from a declared vocabulary in data/reference/.",
+    "free_text": "Publisher-authored prose. Permitted only where the publisher's own text cannot name a person."
+  },
+  "_forbidden_source_columns": [
+    "JudgeFiling",
+    "JudgeDisposition",
+    "JudgeApptDist",
+    "DateJudgeAppt",
+    "CeoFiling",
+    "CeoNotes",
+    "CeoReplaced",
+    "DateCeoBegin",
+    "DateCeoEnd",
+    "TrusteeName",
+    "ExaminerName",
+    "TurnPerson",
+    "CommRetireesName",
+    "attorney",
+    "attorneys",
+    "party",
+    "parties",
+    "assignedTo",
+    "referredTo",
+    "assigned_to",
+    "referred_to",
+    "judge",
+    "judge_name",
+    "timekeeper",
+    "timekeeper_name",
+    "narrative",
+    "description_of_services"
+  ],
+  "tables": {
+    "data/conformed/dim_case.csv": {
+      "grain": "one row per BRD case, after the subject-matter exclusion",
+      "columns": {
+        "PrimaryKey": "identifier",
+        "CaseNum": "identifier",
+        "NameCorp": "organisation",
+        "CommonName": "organisation",
+        "CikBefore": "identifier",
+        "DateFiled": "date",
+        "YearFiled": "date",
+        "DateConfirmed": "date",
+        "YearConfirmed": "date",
+        "DateDisposed": "date",
+        "YearDisposed": "date",
+        "DaysIn": "quantity",
+        "DistFiled": "controlled",
+        "CityFiled": "controlled",
+        "Chapter": "controlled",
+        "Voluntary": "controlled",
+        "Prepackaged": "controlled",
+        "Disposition": "controlled",
+        "Emerge": "controlled",
+        "Shop": "controlled",
+        "AssetsPetition": "quantity",
+        "LiabPetition": "quantity",
+        "AssetsBefore": "quantity",
+        "LiabBefore": "quantity",
+        "SalesBefore": "quantity",
+        "EmplBefore": "quantity",
+        "SICPrimary": "identifier",
+        "SICDescription": "controlled",
+        "SICIndustryGroup": "controlled",
+        "SICMajGroup": "controlled",
+        "SICDivision": "controlled",
+        "DipAtty": "organisation",
+        "CommCredAtty": "organisation",
+        "ClaimsAgent": "controlled",
+        "ClaimsAgentFirm": "organisation",
+        "ProfFees10k": "quantity",
+        "DateFeeRev": "date",
+        "FeeReviewer": "controlled",
+        "DktOnPacer": "controlled",
+        "DocsOnPacer": "controlled",
+        "DocsPublic": "controlled",
+        "court_id": "identifier",
+        "filed_iso": "date",
+        "in_appendix_b_era": "controlled",
+        "meets_threshold": "controlled",
+        "threshold_basis": "free_text",
+        "sic_major_code": "identifier"
+      }
+    },
+    "data/reference/dim_court.csv": {
+      "grain": "one row per CourtListener bankruptcy court id derived from the spine",
+      "columns": {
+        "court_id": "identifier",
+        "brd_dist_filed": "controlled",
+        "cases": "quantity"
+      }
+    },
+    "data/reference/excluded_sic.csv": {
+      "grain": "one row per SIC major group excluded by the subject-matter rule",
+      "columns": {
+        "sic_major_code": "identifier",
+        "sic_major_description": "controlled",
+        "rule": "free_text",
+        "owner": "organisation"
+      }
+    },
+    "data/conformed/dim_task_code.csv": {
+      "grain": "one row per task code or project category, per vocabulary",
+      "columns": {
+        "vocabulary": "controlled",
+        "code": "identifier",
+        "name": "controlled",
+        "phase_code": "identifier",
+        "phase_name": "controlled",
+        "definition": "free_text",
+        "effective_from": "date",
+        "effective_to": "date",
+        "source_file": "identifier"
+      }
+    },
+    "data/reference/crosswalk_task_codes.csv": {
+      "grain": "one row per Appendix B project category, mapped to UTBMS-BK-1997",
+      "columns": {
+        "ustp_category": "controlled",
+        "utbms_code": "identifier",
+        "utbms_name": "controlled",
+        "match_type": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/entry_classifier.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "entry_class": "controlled",
+        "pattern": "controlled",
+        "professional_type_hint": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/professional_type.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "professional_type": "controlled",
+        "pattern": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/title_to_role.csv": {
+      "grain": "one rule per row, applied in priority order; first match wins",
+      "columns": {
+        "priority": "quantity",
+        "role": "controlled",
+        "pattern": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/conformed/coverage_by_case.csv": {
+      "grain": "one row per Appendix B-era case in the spine",
+      "columns": {
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "year_filed": "date",
+        "meets_threshold": "controlled",
+        "docket_found": "controlled",
+        "search_truncated": "controlled",
+        "entries_classified": "quantity",
+        "entries_unclassified": "quantity",
+        "applications_listed": "quantity",
+        "orders_listed": "quantity",
+        "documents_available": "quantity",
+        "documents_stored": "quantity"
+      }
+    },
+    "data/conformed/m04_coverage.csv": {
+      "grain": "one row per grouping value; M-04",
+      "columns": {
+        "grouping": "controlled",
+        "group_value": "controlled",
+        "cases": "quantity",
+        "cases_with_a_docket": "quantity",
+        "cases_with_any_stored_document": "quantity",
+        "cases_complete_enumeration": "quantity",
+        "applications_listed": "quantity",
+        "documents_stored": "quantity",
+        "case_reach_rate": "quantity",
+        "document_reach_rate": "quantity"
+      }
+    },
+    "data/reference/firm_category_to_ustp.csv": {
+      "grain": "one row per firm-authored project category",
+      "columns": {
+        "firm_pattern": "controlled",
+        "category_as_filed": "controlled",
+        "ustp_category": "controlled",
+        "match_type": "controlled",
+        "note": "free_text"
+      }
+    },
+    "data/reference/firm_alias_overrides.csv": {
+      "grain": "one hand-authored firm match the rule could not make",
+      "columns": {
+        "brd_name": "organisation",
+        "caption_name": "organisation",
+        "reason": "free_text"
+      }
+    },
+    "data/conformed/fact_application.csv": {
+      "grain": "one row per stored fee-application or order document",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "document_number": "identifier",
+        "filer_normalised": "organisation",
+        "professional_type": "controlled",
+        "entry_class": "controlled",
+        "application_type": "controlled",
+        "period_start": "date",
+        "period_end": "date",
+        "page_count": "quantity",
+        "total_fees_stated": "quantity",
+        "total_hours_stated": "quantity",
+        "layout_family": "controlled",
+        "parse_status": "controlled"
+      }
+    },
+    "data/conformed/fact_role_summary.csv": {
+      "grain": "one row per application x firm x conformed role; NO per-person row exists",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "role": "controlled",
+        "timekeepers": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "rate_min": "quantity",
+        "rate_max": "quantity",
+        "layout_family": "controlled"
+      }
+    },
+    "data/conformed/fact_category_summary.csv": {
+      "grain": "one row per application x firm-authored project category",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "category_as_filed": "controlled",
+        "task_code_as_filed": "identifier",
+        "matter_number": "identifier",
+        "hours": "quantity",
+        "fees": "quantity",
+        "layout_family": "controlled"
+      }
+    },
+    "data/conformed/parse_status.csv": {
+      "grain": "one row per stored document",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "path": "identifier",
+        "page_count": "quantity",
+        "layout_family": "controlled",
+        "parse_status": "controlled",
+        "reason": "free_text",
+        "role_rows": "quantity",
+        "category_rows": "quantity"
+      }
+    },
+    "data/conformed/m01_blended_rate_by_category.csv": {
+      "grain": "one row per conformed project category; M-01",
+      "columns": {
+        "ustp_category": "controlled",
+        "applications": "quantity",
+        "firms": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "blended_rate": "quantity",
+        "suppressed": "controlled"
+      }
+    },
+    "data/conformed/m02_staffing_mix.csv": {
+      "grain": "one row per conformed role; M-02",
+      "columns": {
+        "role": "controlled",
+        "applications": "quantity",
+        "firms": "quantity",
+        "timekeepers": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "hours_share": "quantity",
+        "fees_share": "quantity",
+        "rate_min": "quantity",
+        "rate_max": "quantity"
+      }
+    },
+    "data/conformed/m03_rate_progression.csv": {
+      "grain": "one row per docket x filer x role with two or more in-scope applications; M-03",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "role": "controlled",
+        "applications": "quantity",
+        "first_rate_max": "quantity",
+        "last_rate_max": "quantity",
+        "change_absolute": "quantity",
+        "change_pct": "quantity"
+      }
+    },
+    "data/conformed/m05_fee_concentration.csv": {
+      "grain": "one row per in-scope application; M-05",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "filer_normalised": "organisation",
+        "categories": "quantity",
+        "fees_total": "quantity",
+        "top3_fees": "quantity",
+        "top3_share": "quantity"
+      }
+    },
+    "data/conformed/unmapped_categories.csv": {
+      "grain": "one row per firm-authored category with no conformance mapping; surfaced, never coerced",
+      "columns": {
+        "category_as_filed": "controlled",
+        "occurrences": "quantity",
+        "hours": "quantity",
+        "fees": "quantity",
+        "reason": "free_text"
+      }
+    },
+    "data/conformed/dim_firm.csv": {
+      "grain": "one row per resolved firm",
+      "columns": {
+        "firm_key": "identifier",
+        "canonical_name": "organisation",
+        "source": "controlled",
+        "dockets": "quantity",
+        "applications": "quantity"
+      }
+    },
+    "data/conformed/bridge_firm_alias.csv": {
+      "grain": "one row per resolved (database name, caption name) pair per docket",
+      "columns": {
+        "firm_key": "identifier",
+        "brd_name": "organisation",
+        "caption_name": "organisation",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "match_rule": "controlled",
+        "matched_tokens": "controlled"
+      }
+    },
+    "data/conformed/unresolved_firms.csv": {
+      "grain": "one row per caption firm string the rule could not resolve; the published unresolved set",
+      "columns": {
+        "caption_name": "organisation",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "documents": "quantity",
+        "candidate_brd_names": "organisation",
+        "reason": "free_text"
+      }
+    },
+    "data/raw/recap/manifest.csv": {
+      "grain": "one row per stored corpus document; the hash-asserted freeze over the gitignored PDFs",
+      "columns": {
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "docket_id": "identifier",
+        "docket_entry_id": "identifier",
+        "document_number": "identifier",
+        "attachment_number": "identifier",
+        "entry_class": "controlled",
+        "professional_type": "controlled",
+        "filer_normalised": "organisation",
+        "page_count": "quantity",
+        "bytes": "quantity",
+        "sha256": "identifier",
+        "path": "identifier",
+        "storage_url": "identifier",
+        "retrieved_utc": "date"
+      }
+    },
+    "data/conformed/fact_order.csv": {
+      "grain": "one row per stored fee order; what the court allowed",
+      "columns": {
+        "docket_entry_id": "identifier",
+        "case_primary_key": "identifier",
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "document_number": "identifier",
+        "filer_normalised": "organisation",
+        "professional_type": "controlled",
+        "basis": "controlled",
+        "fees_allowed": "quantity",
+        "expenses_allowed": "quantity",
+        "total_allowed": "quantity",
+        "fee_awards_found": "quantity",
+        "omnibus": "controlled",
+        "parse_status": "controlled"
+      }
+    },
+    "data/conformed/v2_requested_vs_allowed.csv": {
+      "grain": "one row per parsed application; paired to an order or the rule that prevented it",
+      "columns": {
+        "court_id": "identifier",
+        "docket_number": "identifier",
+        "application_entry_id": "identifier",
+        "order_entry_id": "identifier",
+        "filer_normalised": "organisation",
+        "application_type": "controlled",
+        "order_basis": "controlled",
+        "fees_requested": "quantity",
+        "fees_allowed": "quantity",
+        "cut_absolute": "quantity",
+        "cut_pct": "quantity",
+        "status": "controlled",
+        "rule": "free_text"
+      }
+    }
+  }
+}
