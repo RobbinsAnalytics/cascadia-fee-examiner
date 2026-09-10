@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cascadia Fee Examiner — entity resolution with no shared key</title>
+<meta name="description" content="A conformed spine across three sources that share no key: a frozen bankruptcy database, fee applications pulled from the public docket, and two task vocabularies. An independent portfolio project, built and reported honestly at 48 of 216 cases searched.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cascadia Fee Examiner — entity resolution with no shared key">
+<meta property="og:description" content="The same law firm named three ways across three systems, and no key to join them. A conformed spine, reported at its actual state of completion.">
+<meta property="og:image" content="https://www.robbinsanalytics.com/assets/thumb-fee-examiner.png">
+<meta property="og:url" content="https://www.robbinsanalytics.com/cascadia-fee-examiner/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.robbinsanalytics.com/assets/thumb-fee-examiner.png">
+<link rel="stylesheet" href="assets/cascadia.css?v=32a38aecaf">
+<style>
+  .answers { display:flex; flex-wrap:wrap; gap:18px; margin:18px 0 6px; }
+  .answer { flex:1 1 210px; border:1px solid var(--mist,#E4E7E3); border-radius:3px;
+            padding:14px 16px; background:#FCFCFA; }
+  .answer .lbl { font:12px/1.5 "Segoe UI",Arial,sans-serif; color:#5B6660;
+                 text-transform:uppercase; letter-spacing:.06em; }
+  .answer .val { font:700 30px/1.15 "Source Serif 4",Georgia,serif; margin:4px 0 2px; }
+  .answer .val.neutral { color:#232B27; }
+  .answer .val.partial { color:#5B6660; }
+  .answer .note { font:13px/1.5 "Segoe UI",Arial,sans-serif; color:#5B6660; }
+  .chart { width:100%; }
+  .chart-summary { font:13px/1.6 "Segoe UI",Arial,sans-serif; color:#232B27;
+                   margin:10px 2px 0; max-width:70ch; }
+  details.data-table { margin:8px 2px 0; }
+  details.data-table summary { font:12px/1.5 "Segoe UI",Arial,sans-serif;
+                               color:#5B6660; cursor:pointer; min-height:24px; }
+  details.data-table table { border-collapse:collapse; margin-top:8px;
+                             font:12px/1.5 "Segoe UI",Arial,sans-serif; }
+  details.data-table caption { text-align:left; font-weight:600; padding:4px 0;
+                               color:#232B27; }
+  details.data-table th, details.data-table td { border:1px solid #E4E7E3;
+                             padding:4px 8px; text-align:right; }
+  details.data-table th[scope="row"] { text-align:left; font-weight:400; }
+  details.data-table thead th { background:#F3F5F2; text-align:right; }
+  .governance-note { border-left:3px solid #1E7A4C; padding:2px 0 2px 14px;
+                     margin:16px 2px; font:14px/1.65 "Segoe UI",Arial,sans-serif;
+                     color:#232B27; max-width:72ch; }
+  .health { border:1px solid #E4E7E3; border-radius:3px; padding:16px 18px;
+            background:#FCFCFA; margin:16px 0; }
+  .health dl { display:grid; grid-template-columns:1fr auto; gap:6px 18px;
+               margin:0; font:13px/1.6 "Segoe UI",Arial,sans-serif; }
+  .health dt { color:#5B6660; }
+  .health dd { margin:0; text-align:right; font-variant-numeric:tabular-nums;
+               color:#232B27; }
+  .state { display:inline-block; padding:1px 8px; border-radius:2px;
+           font:12px/1.6 "Segoe UI",Arial,sans-serif; }
+  .state.stopped { background:#F6EDE7; color:#BA572D; }
+  .state.ok      { background:#E8F1EC; color:#1E7A4C; }
+  table.refused { border-collapse:collapse; margin:12px 2px 4px; width:100%;
+                    font:13px/1.55 "Segoe UI",Arial,sans-serif; }
+  table.refused caption { text-align:left; font-weight:600; padding:4px 0;
+                            color:#232B27; }
+  table.refused th, table.refused td { border:1px solid #E4E7E3;
+                            padding:7px 10px; text-align:left;
+                            vertical-align:top; }
+  table.refused thead th { background:#F3F5F2; }
+  table.refused th[scope="row"] { font-weight:400; color:#232B27; }
+  h2 { font:600 24px/1.3 "Source Serif 4",Georgia,serif; margin:34px 0 6px; }
+  h3 { font:600 17px/1.35 "Source Serif 4",Georgia,serif; margin:22px 0 4px; }
+  .lede { font:17px/1.65 "Source Serif 4",Georgia,serif; max-width:70ch; }
+  @media (max-width:400px) { .answer .val { font-size:24px; } }
+</style>
+<script src="assets/echarts.min.js?v=334d8b37c4"></script>
+<!-- Local, and after ECharts so registerTheme('cascadia') finds it. -->
+<script src="assets/cascadia-echarts-theme.js?v=94e9c46a07"></script>
+</head>
+<body>
+
+<!--CASCADIA_DATA_START-->
+<script id="cascadia-data" type="application/json">{"asOfSpine":"2023-01-12","c1":{"courts":[{"court":"cacb","cases":1,"stored":0,"reach":0.0},{"court":"moeb","cases":3,"stored":0,"reach":0.0},{"court":"deb","cases":19,"stored":4,"reach":21.05},{"court":"vaeb","cases":2,"stored":1,"reach":50.0},{"court":"nysb","cases":7,"stored":4,"reach":57.14},{"court":"txsb","cases":13,"stored":10,"reach":76.92},{"court":"njb","cases":1,"stored":1,"reach":100.0},{"court":"txnb","cases":2,"stored":2,"reach":100.0}],"population":216,"searched":48},"c2":{"counts":{"exact":9,"rename":8,"none":3,"broader":2},"total":22,"noneCategories":["Budgeting (Case)","Reporting","Valuation"]},"c3":{"resolved":9,"unresolved":16,"total":25,"examples":[{"name":"Barley Snyder LLP","reason":"no database name's tokens are a subset of the caption -- most often a co-counsel, local or conflicts firm the database never recorded"},{"name":"Expenses of Giuliano Miller and Company LLC","reason":"no database name's tokens are a subset of the caption -- most often a co-counsel, local or conflicts firm the database never recorded"},{"name":"Province, LLC","reason":"no database name's tokens are a subset of the caption -- most often a co-counsel, local or conflicts firm the database never recorded"}]},"c4":{"roles":[{"role":"partner","applications":1,"hoursShare":49.68,"feesShare":62.47,"rateMin":875.0,"rateMax":875.0},{"role":"associate","applications":1,"hoursShare":46.86,"feesShare":34.19,"rateMin":481.58,"rateMax":481.58},{"role":"of_counsel","applications":1,"hoursShare":1.79,"feesShare":1.91,"rateMin":825.0,"rateMax":825.0},{"role":"paraprofessional","applications":3,"hoursShare":1.68,"feesShare":1.43,"rateMin":200.0,"rateMax":545.0}],"nApplications":3},"c5":{"counts":{"1: no parsed order on this docket":8,"2: order is omnibus":2,"3: filer strings do not resolve to one firm":1},"total":11,"paired":0},"health":{"generated_utc":"2026-09-10T00:49:45+00:00","module":"cascadia-fee-examiner","frozen_spine":{"as_of_date":"2023-01-12","as_of_date_meaning":"publisher's release date for the frozen snapshot","sha256":"03a17b10802b26eefce1d30a4dd45e774b3a252a16ad8fae60116185d97dfe70","cases_in_snapshot":1218,"cases_after_subject_matter_filter":1123,"excluded_sic_48":95,"appendix_b_era_cases":216,"era_threshold_unknown":44},"codebook":{"utbms_task_codes":21,"ustp_categories":22,"crosswalk_by_match_type":{"broader":2,"exact":9,"none":3,"rename":8},"ustp_categories_without_utbms_counterpart":["Budgeting (Case)","Reporting","Valuation"],"notice_claim_all_but_one_holds":true,"the_one":["Reporting"],"prose_and_exhibit_d1_agree":true},"acquisition":{"cases_in_population":216,"cases_searched":48,"cases_not_yet_searched":168,"cases_truncated":6,"documents_stored":63,"last_run_status":"stopped: rate window clears in 3605s; stopping rather than idling","last_run_requests":91,"unique_docket_entries_classified":3667,"unclassified_rate":0.02617943823288792,"classification":{"application_interim":1261,"order":827,"service":546,"application_final":390,"certification":253,"motion":182,"unclassified":96,"monthly_statement":34,"application_amended":30,"notice":29,"objection":19}},"coverage_M04":{"case_reach_rate":"0.4583","document_reach_rate":"0.0222","denominator_note":"rates are over SEARCHED cases; not-yet-searched is reported separately, not counted as uncovered"},"parse":{"documents":63,"parsed":11,"parse_rate":0.1746,"by_status":{"parsed":11,"unparsed":52},"layout_families":{"exhibit_a_attorney_table":2,"generic_timekeeper_table":2,"none":52,"role_subtotal_rows":1,"role_summary_table":6}},"measurement_scope":{"rule":"law-firm, single-period interim applications","in_scope":3,"excluded_by_type":{"final":7,"amended":0,"order":0}},"resolution":{"caption_firm_pairs":25,"match_rate":0.36,"unresolved_rate":0.64,"by_rule":{"token_subset":9},"single_token_matches_refused":0,"overrides_used":0,"unresolved_examples_file":"data/conformed/unresolved_firms.csv"},"reconciliation_V2":{"orders_in_corpus":21,"orders_parsed":11,"orders_omnibus":5,"applications_considered":11,"paired":0,"not_paired_by_rule":{"1: no parsed order on this docket":8,"2: order is omnibus":2,"3: filer strings do not resolve to one firm":1},"median_cut_pct":null},"gates":{"validate":{"passed":true,"exit_code":0,"last_line":"PUBLISH GATE: PASSED"},"validate_freeze":{"passed":true,"exit_code":0,"last_line":"PUBLISH GATE: PASSED \u2014 freeze intact."},"validate_measures":{"passed":true,"exit_code":0,"last_line":"Reconciliation written to governance\\reconciliation.md"}},"all_gates_passed":true}}</script>
+<!--CASCADIA_DATA_END-->
+
+<div class="wrap">
+
+<header class="site-head">
+  <p class="kicker"><a href="https://www.robbinsanalytics.com/">Cascadia Portfolio</a> · Fee Examiner</p>
+  <h1>The same firm, named three ways, with no key to join them</h1>
+  <p class="subtitle">A conformed spine across a frozen bankruptcy database, fee applications
+  pulled from the public docket, and two task-code vocabularies — three sources, three
+  owners, none sharing an identifier. Reported honestly at its actual state: 48 of
+  216 Appendix B-era cases searched so far.</p>
+</header>
+
+<h2>Where the build actually stands</h2>
+<p class="lede">Nothing below claims the acquisition is finished, because it is not.</p>
+<p class="chart-summary">The population is 216 large-corporate Chapter 11 cases filed under
+the U.S. Trustee's Appendix B fee guidelines. Of those, 48 have been searched
+against the public docket archive and 168 have not — a rate limit measured at
+50 requests per hour, on either credential tier, is the reason. 6 of the
+searched cases were truncated at a page cap and are excluded from the rates below rather
+than counted as complete.</p>
+
+<div class="answers">
+  <div class="answer">
+    <p class="lbl">Cases searched</p>
+    <p class="val neutral">48 / 216</p>
+    <p class="note">45.8% of searched cases yielded at least one stored document;
+    document-level reach is 2.22%.</p>
+  </div>
+  <div class="answer">
+    <p class="lbl">Firm identity resolved</p>
+    <p class="val neutral">9 / 25</p>
+    <p class="note">Caption-to-database pairs matched by a stated subset rule. Every
+    unresolved pair is published with its own reason, not dropped.</p>
+  </div>
+  <div class="answer">
+    <p class="lbl">Task vocabulary, exact match</p>
+    <p class="val neutral">9 / 22</p>
+    <p class="note">U.S. Trustee project categories with an identical 1997 UTBMS
+    counterpart. 3 have none at all.</p>
+  </div>
+  <div class="answer">
+    <p class="lbl">Requested paired with allowed</p>
+    <p class="val partial">0 / 11</p>
+    <p class="note">The court's own award, checked against the applicant's ask, under four
+    stated rules. Zero pairs yet — every row says which rule stopped it.</p>
+  </div>
+</div>
+
+<h2>Coverage varies by forum, and the largest court is the least reached</h2>
+<div class="chart-card">
+  <div id="c1" class="chart" style="height:420px"></div>
+  <p id="sum-c1" class="chart-summary"></p>
+  <details class="data-table"><summary>Chart 1 data table</summary><table id="tbl-c1"><caption>Chart 1 data — coverage reach by court</caption><thead><tr><th scope="col">Court</th><th scope="col">Cases searched</th><th scope="col">Documents stored</th><th scope="col">Reach</th></tr></thead><tbody><tr><th scope="row">cacb</th><td>1</td><td>0</td><td>0.0%</td></tr><tr><th scope="row">moeb</th><td>3</td><td>0</td><td>0.0%</td></tr><tr><th scope="row">deb</th><td>19</td><td>4</td><td>21.1%</td></tr><tr><th scope="row">vaeb</th><td>2</td><td>1</td><td>50.0%</td></tr><tr><th scope="row">nysb</th><td>7</td><td>4</td><td>57.1%</td></tr><tr><th scope="row">txsb</th><td>13</td><td>10</td><td>76.9%</td></tr><tr><th scope="row">njb</th><td>1</td><td>1</td><td>100.0%</td></tr><tr><th scope="row">txnb</th><td>2</td><td>2</td><td>100.0%</td></tr></tbody></table></details>
+</div>
+
+<div class="governance-note">
+<strong>"Not yet searched" and "not covered" are different claims</strong>, and this chart
+carries only the first: every bar is a court that has been searched, and its reach is the
+share of its cases with at least one retrievable document. 2 searched cases
+returned no docket in the archive at all. The documents are public at the claims agents'
+own sites, which prohibit automated retrieval — this measures what is reachable by the one
+permitted method, RECAP, and that is the honest scope of the claim.
+</div>
+
+<h2>Two vocabularies for the same billing categories, and one has no counterpart</h2>
+<div class="chart-card">
+  <div id="c2" class="chart" style="height:340px"></div>
+  <p id="sum-c2" class="chart-summary"></p>
+  <details class="data-table"><summary>Chart 2 data table</summary><table id="tbl-c2"><caption>Chart 2 data — task-vocabulary crosswalk by match type</caption><thead><tr><th scope="col">Match type</th><th scope="col">Categories</th></tr></thead><tbody><tr><th scope="row">exact</th><td>9</td></tr><tr><th scope="row">rename</th><td>8</td></tr><tr><th scope="row">none</th><td>3</td></tr><tr><th scope="row">broader</th><td>2</td></tr></tbody></table></details>
+</div>
+
+<div class="governance-note">
+<strong>The U.S. Trustee's own notice says seven of its categories were extracted from an
+older vocabulary, "all but one" of which is in the 1997 UTBMS set — and does not say which
+one.</strong> This build tested that claim rather than repeating it: the one is
+<strong>Reporting</strong>. The three categories with no UTBMS counterpart at all are
+Budgeting (Case), Reporting, Valuation.
+</div>
+
+<h2>Nine of twenty-five caption-to-database firm pairs resolve by a stated rule</h2>
+<div class="chart-card">
+  <div id="c3" class="chart" style="height:280px"></div>
+  <p id="sum-c3" class="chart-summary"></p>
+  <details class="data-table"><summary>Chart 3 data table</summary><table id="tbl-c3"><caption>Chart 3 data — firm-identity resolution</caption><thead><tr><th scope="col">Outcome</th><th scope="col">Caption/firm pairs</th></tr></thead><tbody><tr><th scope="row">Resolved by a stated rule</th><td>9</td></tr><tr><th scope="row">Unresolved, published with a reason</th><td>16</td></tr></tbody></table></details>
+</div>
+
+<div class="governance-note">
+<strong>A 100% match rate would be evidence the matching rule is too loose, not that the
+data is clean.</strong> The rule matches when the database's short editorial name is a
+token subset of the docket caption's full name — never a similarity score, never a single
+shared token unless it is unique in that docket. The 16 pairs that do not
+match are published with the specific reason each failed, most often because the database
+records only the lead firm and the docket names a co-counsel, local, or conflicts firm the
+database never recorded — e.g. <strong>Barley Snyder LLP</strong> and
+<strong>Expenses of Giuliano Miller and Company LLC</strong>.
+</div>
+
+<h2>Three applications, and the document behind them names no firm</h2>
+<div class="chart-card">
+  <div id="c4" class="chart" style="height:340px"></div>
+  <p id="sum-c4" class="chart-summary"></p>
+  <details class="data-table"><summary>Chart 4 data table</summary><table id="tbl-c4"><caption>Chart 4 data — staffing mix, hours and fees share by role</caption><thead><tr><th scope="col">Role</th><th scope="col">Applications reporting</th><th scope="col">Hours share</th><th scope="col">Fees share</th><th scope="col">Rate min</th><th scope="col">Rate max</th></tr></thead><tbody><tr><th scope="row">partner</th><td>1</td><td>49.7%</td><td>62.5%</td><td>$875</td><td>$875</td></tr><tr><th scope="row">associate</th><td>1</td><td>46.9%</td><td>34.2%</td><td>$482</td><td>$482</td></tr><tr><th scope="row">of_counsel</th><td>1</td><td>1.8%</td><td>1.9%</td><td>$825</td><td>$825</td></tr><tr><th scope="row">paraprofessional</th><td>3</td><td>1.7%</td><td>1.4%</td><td>$200</td><td>$545</td></tr></tbody></table></details>
+</div>
+
+<div class="governance-note">
+<strong>This is a staffing mix within 3 applications, not within the population, and
+none of the three carries an extracted firm name.</strong> That is not a resolution
+failure across the board: a different filing on the same docket
+(deb 20-11177) resolved cleanly to a named firm — it is these three
+specific documents whose caption text did not match the extraction pattern, and the honest
+reading is a per-document gap, not a per-docket one. Read this chart against the coverage
+figures above, never as a claim about the population.
+</div>
+
+<h2>Zero of eleven applications could be checked against what the court allowed</h2>
+<div class="chart-card">
+  <div id="c5" class="chart" style="height:280px"></div>
+  <p id="sum-c5" class="chart-summary"></p>
+  <details class="data-table"><summary>Chart 5 data table</summary><table id="tbl-c5"><caption>Chart 5 data — why requested could not be paired with allowed</caption><thead><tr><th scope="col">Blocking rule</th><th scope="col">Applications</th></tr></thead><tbody><tr><th scope="row">No parsed order on this docket</th><td>8</td></tr><tr><th scope="row">Order is omnibus</th><td>2</td></tr><tr><th scope="row">Filer strings do not resolve to one firm</th><td>1</td></tr></tbody></table></details>
+</div>
+
+<div class="governance-note">
+<strong>This is the module's one figure against an answer key it did not produce</strong> —
+the court's fee order, written by a different author than the application it responds to.
+An omnibus order publishes no single allowed figure by design: several professionals'
+awards in one order cannot be attributed without a rule this module has not written, so the
+award count is published and the amount is left blank rather than summed or guessed.
+</div>
+
+<h2>How it stays right</h2>
+<p class="chart-summary">The figures above are read from the module's own health surface,
+written by the same gates that must pass before anything is published — not restated by
+hand.</p>
+
+<div class="health">
+  <h3 style="margin-top:0">Build state</h3>
+  <dl>
+    <dt>All three publish gates passed</dt><dd><span class="state true">true</span></dd>
+    <dt>Last acquisition run</dt><dd><span class="state stopped">stopped: rate window clears in 3605s; stopping rather than idling</span></dd>
+    <dt>Docket entries classified</dt><dd>3,667 (2.62% unclassified)</dd>
+    <dt>Documents parsed</dt><dd>11 of 63 (17.5%)</dd>
+    <dt>Spine frozen as of</dt><dd>2023-01-12</dd>
+    <dt>Health surface generated</dt><dd>2026-09-10 00:49:45 UTC</dd>
+  </dl>
+</div>
+
+<h3>What this module refuses to publish, and why</h3>
+<p class="chart-summary">A module that only ever shows what it measured has said nothing
+about what it declined to measure. Every refusal below is a decision, not a gap that was
+never noticed.</p>
+
+<table class="refused">
+<caption>Measures deliberately not certified</caption>
+<thead><tr><th scope="col">What is refused</th><th scope="col">Why</th></tr></thead>
+<tbody>
+<tr><th scope="row">Total professional fees per case</th>
+    <td>The archive holds a minority of the applications in most cases; a per-case total
+    would sum an unknown fraction and read as complete. Coverage is published as its own
+    measure instead.</td></tr>
+<tr><th scope="row">Anything at per-person grain</th>
+    <td>Rates by named timekeeper, seniority curves, leverage by individual. The source data
+    supports all of them. No per-timekeeper row exists anywhere in this module's
+    pipeline — the parser aggregates to application × firm × role as it reads, before
+    anything is written.</td></tr>
+<tr><th scope="row">Anything cut by debtor identity</th>
+    <td>No output carries a party column. Telecommunications debtors are excluded at the
+    spine, before any measure, by an industry-code test rather than a name match.</td></tr>
+<tr><th scope="row">Awarded amounts as an input to any other measure</th>
+    <td>They are the reconciliation's answer key. Using an answer key as an input is how a
+    check stops being one.</td></tr>
+</tbody>
+</table>
+
+<div class="disclosure">
+<h3>Disclosure</h3>
+<p>An independent portfolio project by Aaron Robbins. This module uses data from the
+Florida-UCLA-LoPucki Bankruptcy Research Database, as its use conditions require. The
+UTBMS bankruptcy code set is the intellectual property of the American Bar Association,
+reproduced by the LEDES Oversight Committee with the ABA's permission. Court filings are
+public records. <strong>No natural person's name appears anywhere on this page or in this
+module's data</strong> — not a timekeeper, not an attorney of record, not a judge — and no
+telecommunications debtor is analysed. Nothing here is legal advice.</p>
+<p>Source, governance documents and build scripts:
+<a href="https://github.com/RobbinsAnalytics/cascadia-fee-examiner">github.com/RobbinsAnalytics/cascadia-fee-examiner</a>.
+Every figure on this page is computed at build time from a certified artifact; the
+independent re-derivation that gates publication is <code>src/validate_measures.py</code>.</p>
+<p class="asof">Spine frozen as of 2023-01-12 · health surface generated 2026-09-10 00:49:45 UTC · cost
+layer retrieved per document, incomplete at 48 of 216 cases</p>
+</div>
+
+</div>
+
+<script src="assets/page.js?v=39ce54afb0"></script>
+</body>
+</html>
