@@ -1,68 +1,68 @@
-court_id,brd_dist_filed,cases
-akb,AK,1
-almb,AL MD,3
-alnb,AL ND,3
-alsb,AL SD,1
-areb,AR ED,1
-azb,AZ,10
-cacb,CA CD,40
-caeb,CA ED,1
-canb,CA ND,21
-casb,CA SD,4
-cob,CO,9
-ctb,CT,1
-deb,DE,402
-flmb,FL MD,11
-flsb,FL SD,11
-gamb,GA MD,1
-ganb,GA ND,12
-gasb,GA SD,1
-hib,HI,1
-idb,ID,2
-ilnb,IL ND,30
-innb,IN ND,1
-insb,IN SD,8
-ksb,KS,4
-kyeb,KY ED,1
-laeb,LA ED,6
-lamb,LA MD,1
-lawb,LA WD,2
-mab,MA,10
-mdb,MD,10
-mieb,MI ED,15
-mnb,MN,3
-moeb,MO ED,12
-mowb,MO WD,5
-mssb,MS SD,3
-nceb,NC ED,5
-neb,NE,2
-nhb,NH,3
-njb,NJ,24
-nmb,NM,1
-nvb,NV,13
-nyeb,NY ED,1
-nynb,NY ND,1
-nysb,NY SD,196
-nywb,NY WD,1
-ohnb,OH ND,14
-ohsb,OH SD,8
-okwb,OK WD,5
-orb,OR,2
-pamb,PA MD,2
-pawb,PA WD,4
-scb,SC,4
-tneb,TN ED,1
-tnmb,TN MD,3
-txnb,TX ND,40
-txsb,TX SD,96
-txwb,TX WD,10
-utb,UT,4
-vaeb,VA ED,22
-vawb,VA WD,1
-vtb,VT,1
-waeb,WA ED,2
-wawb,WA WD,3
-wieb,WI ED,4
-wiwb,WI WD,1
-wvnb,WV ND,1
-wvsb,WV SD,1
+court_id,brd_dist_filed,cases,court_name
+akb,AK,1,Alaska
+almb,AL MD,3,Middle District of Alabama
+alnb,AL ND,3,Northern District of Alabama
+alsb,AL SD,1,Southern District of Alabama
+areb,AR ED,1,Eastern District of Arkansas
+azb,AZ,10,Arizona
+cacb,CA CD,40,Central District of California
+caeb,CA ED,1,Eastern District of California
+canb,CA ND,21,Northern District of California
+casb,CA SD,4,Southern District of California
+cob,CO,9,Colorado
+ctb,CT,1,Connecticut
+deb,DE,402,Delaware
+flmb,FL MD,11,Middle District of Florida
+flsb,FL SD,11,Southern District of Florida
+gamb,GA MD,1,Middle District of Georgia
+ganb,GA ND,12,Northern District of Georgia
+gasb,GA SD,1,Southern District of Georgia
+hib,HI,1,Hawaii
+idb,ID,2,Idaho
+ilnb,IL ND,30,Northern District of Illinois
+innb,IN ND,1,Northern District of Indiana
+insb,IN SD,8,Southern District of Indiana
+ksb,KS,4,Kansas
+kyeb,KY ED,1,Eastern District of Kentucky
+laeb,LA ED,6,Eastern District of Louisiana
+lamb,LA MD,1,Middle District of Louisiana
+lawb,LA WD,2,Western District of Louisiana
+mab,MA,10,Massachusetts
+mdb,MD,10,Maryland
+mieb,MI ED,15,Eastern District of Michigan
+mnb,MN,3,Minnesota
+moeb,MO ED,12,Eastern District of Missouri
+mowb,MO WD,5,Western District of Missouri
+mssb,MS SD,3,Southern District of Mississippi
+nceb,NC ED,5,Eastern District of North Carolina
+neb,NE,2,Nebraska
+nhb,NH,3,New Hampshire
+njb,NJ,24,New Jersey
+nmb,NM,1,New Mexico
+nvb,NV,13,Nevada
+nyeb,NY ED,1,Eastern District of New York
+nynb,NY ND,1,Northern District of New York
+nysb,NY SD,196,Southern District of New York
+nywb,NY WD,1,Western District of New York
+ohnb,OH ND,14,Northern District of Ohio
+ohsb,OH SD,8,Southern District of Ohio
+okwb,OK WD,5,Western District of Oklahoma
+orb,OR,2,Oregon
+pamb,PA MD,2,Middle District of Pennsylvania
+pawb,PA WD,4,Western District of Pennsylvania
+scb,SC,4,South Carolina
+tneb,TN ED,1,Eastern District of Tennessee
+tnmb,TN MD,3,Middle District of Tennessee
+txnb,TX ND,40,Northern District of Texas
+txsb,TX SD,96,Southern District of Texas
+txwb,TX WD,10,Western District of Texas
+utb,UT,4,Utah
+vaeb,VA ED,22,Eastern District of Virginia
+vawb,VA WD,1,Western District of Virginia
+vtb,VT,1,Vermont
+waeb,WA ED,2,Eastern District of Washington
+wawb,WA WD,3,Western District of Washington
+wieb,WI ED,4,Eastern District of Wisconsin
+wiwb,WI WD,1,Western District of Wisconsin
+wvnb,WV ND,1,Northern District of West Virginia
+wvsb,WV SD,1,Southern District of West Virginia

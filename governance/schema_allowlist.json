@@ -97,7 +97,8 @@
       "columns": {
         "court_id": "identifier",
         "brd_dist_filed": "controlled",
-        "cases": "quantity"
+        "cases": "quantity",
+        "court_name": "controlled"
       }
     },
     "data/reference/excluded_sic.csv": {
