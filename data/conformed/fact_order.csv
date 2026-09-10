@@ -9,3 +9,14 @@ docket_entry_id,case_primary_key,court_id,docket_number,document_number,filer_no
 112799100,1151,txsb,19-32713,943,,law_firm,final,,,,0,false,unparsed
 28694383,1077,txsb,16-33590,1382,"Greenberg Traurig, LLP",law_firm,final,,6144750.50,,0,false,unparsed
 28694397,1077,txsb,16-33590,1396,"Conway MacKenzie, Inc",financial_advisor,final,4563.00,1595505.75,,1,false,parsed
+438007721,1029,deb,15-10458,2138,,unknown,final,,0.00,,2,true,parsed
+148719845,1201,txsb,20-33568,722,"FTI Consulting, Inc",financial_advisor,final,1295452.00,,,1,false,parsed
+148719850,1201,txsb,20-33568,721,Kramer Levin Naftalis & Frankel LLP,law_firm,final,,,,0,false,unparsed
+179693459,1220,txsb,20-35226,1565,"Alixpartners, LLP, Financial Advisor to the Official Committee of Unsecured Creditors",financial_advisor,interim,,11198.43,,0,false,unparsed
+148567151,1195,txsb,20-33163,1341,"Alvarez & Marsal North America, LLC",financial_advisor,interim,,,,2,true,parsed
+148567150,1195,txsb,20-33163,1342,Womble Bond Dickinson (US) LLP,law_firm,interim,172784.50,1506.88,,1,false,parsed
+99312572,1070,txnb,16-31854,1949,,financial_advisor,final,,,,0,false,unparsed
+162359235,1197,txsb,20-33233,3521,,financial_advisor,final,,,,0,false,unparsed
+156398637,1197,txsb,20-33233,3123,Kirkland & Ellis LLP and Kirland & Ellis International LLP,law_firm,final,,,,2,true,parsed
+162353262,1197,txsb,20-33233,3515,,law_firm,final,1961.57,,,1,false,parsed
+162756536,1197,txsb,20-33233,3541,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,law_firm,final,,,,2,true,parsed

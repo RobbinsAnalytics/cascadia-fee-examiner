@@ -16,6 +16,8 @@ only; both figures are right and they answer different questions.
 |---|---|---|---|---:|---:|---|
 | 12366662 | 15-33896 | interim | **not_comparable** | 4,417,322.50 | 0.00 | only one of the two exhibits parsed |
 | 141574549 | 20-11177 | interim | **not_comparable** | 6,840.00 | 0.00 | only one of the two exhibits parsed |
+| 149061423 | 20-22637 | final | **not_comparable** | 10,240.00 | 0.00 | only one of the two exhibits parsed |
+| 160039495 | 20-33233 | final | **not_comparable** | 8,039.00 | 14,702,192.00 | final application: the category summary is cumulative and the timekeeper table covers this application only, so the two answer different questions |
 | 24590634 | 17-22770 | final | **not_comparable** | 3,622,098.50 | 7,221,689.00 | final application: the category summary is cumulative and the timekeeper table covers this application only, so the two answer different questions |
 | 24732795 | 17-31432 | final | **not_comparable** | 6,054,683.00 | 6,054,551.00 | final application: the category summary is cumulative and the timekeeper table covers this application only, so the two answer different questions |
 | 28694298 | 16-33590 | final | **not_comparable** | 3,289.50 | 0.00 | only one of the two exhibits parsed |
@@ -23,17 +25,5 @@ only; both figures are right and they answer different questions.
 | 331337164 | 22-10426 | final | **not_comparable** | 8,887,380.75 | 0.00 | only one of the two exhibits parsed |
 | 370663496 | 22-10426 | interim | **not_comparable** | 55,879.00 | 0.00 | only one of the two exhibits parsed |
 
-Comparable: 0 · tied: 0 · not comparable: 8
-
-## V-2 · Requested against allowed
-
-*The court's order is the answer key: a different author than the application it responds to.*
-
-Parsed applications: 9 · parsed orders: 4 · **paired: 0**
-
-| Why not paired | Applications |
-|---|---:|
-| 1: no parsed order on this docket | 7 |
-| 2: order is omnibus | 1 |
-| 3: filer strings do not resolve to one firm | 1 |
+Comparable: 0 · tied: 0 · not comparable: 10
 

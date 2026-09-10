@@ -48,3 +48,17 @@ docket_entry_id,path,page_count,layout_family,parse_status,reason,role_rows,cate
 28694383,data/raw/recap/txsb/4392805/1382.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
 28694397,data/raw/recap/txsb/4392805/1396.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
 28693922,data/raw/recap/txsb/4392805/841.6.pdf,239,,unparsed,no known layout matched (detected family: none),0,0
+438007721,data/raw/recap/deb/4215804/2138.2.pdf,4,,unparsed,no known layout matched (detected family: none),0,0
+22886264,data/raw/recap/deb/4215804/1736.0.pdf,10,,unparsed,no known layout matched (detected family: none),0,0
+148719845,data/raw/recap/txsb/17353713/722.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+148719850,data/raw/recap/txsb/17353713/721.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+179693459,data/raw/recap/txsb/18596037/1565.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+148567151,data/raw/recap/txsb/17292286/1341.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+148567150,data/raw/recap/txsb/17292286/1342.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+149061423,data/raw/recap/nysb/17171037/751.0.pdf,465,generic_timekeeper_table,parsed,,2,0
+99312572,data/raw/recap/txnb/6513951/1949.0.pdf,10,,unparsed,no known layout matched (detected family: none),0,0
+160039495,data/raw/recap/txsb/17301624/3333.0.pdf,1627,exhibit_a_attorney_table,parsed,,2,24
+162359235,data/raw/recap/txsb/17301624/3521.0.pdf,3,,unparsed,no known layout matched (detected family: none),0,0
+156398637,data/raw/recap/txsb/17301624/3123.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+162353262,data/raw/recap/txsb/17301624/3515.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0
+162756536,data/raw/recap/txsb/17301624/3541.0.pdf,2,,unparsed,no known layout matched (detected family: none),0,0

@@ -20,3 +20,7 @@ docket_entry_id,case_primary_key,court_id,docket_number,filer_normalised,role,ti
 331337164,1232,deb,22-10426,"Skadden, Arps, Slate, Meagher & Flom LLP",paraprofessional,2,506.0,251393.0,494.68,580.16,role_subtotal_rows
 331337164,1232,deb,22-10426,"Skadden, Arps, Slate, Meagher & Flom LLP",partner,1,52.4,102704.0,1960.0,1960.0,role_subtotal_rows
 28694298,1077,txsb,16-33590,,paraprofessional,3,15.3,3289.5,215.0,215.0,role_summary_table
+149061423,1184,nysb,20-22637,McDermott Will & Emery LLP,paraprofessional,1,1.9,405.0,769.5,769.5,generic_timekeeper_table
+149061423,1184,nysb,20-22637,McDermott Will & Emery LLP,partner,8,47.1,9835.0,64.37908496732025,4320.0,generic_timekeeper_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,associate,3,4.7,6051.0,1267.5,1519.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,partner,1,1.0,1988.0,1845.0,1845.0,exhibit_a_attorney_table

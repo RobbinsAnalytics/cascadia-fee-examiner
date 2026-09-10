@@ -60,3 +60,27 @@ docket_entry_id,case_primary_key,court_id,docket_number,filer_normalised,categor
 24732795,1099,txnb,17-31432,,Regulatory Matters and Reviews,P270,,286.3,131953.5,role_summary_table
 24732795,1099,txnb,17-31432,,Equity Committee Discovery and Negotiations,P280,,322.4,228402.5,role_summary_table
 24732795,1099,txnb,17-31432,,Corporate Document Preparation and Filing,P400,,7.3,2336.0,role_summary_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Case Administration,,9,222.5,155153.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Adversary Proceedings and Contested Matters,,10,5862.4,5333906.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Automatic Stay Matters,,11,490.9,417712.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Business Operations,,12,13.9,15554.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Cash Management,,13,1.2,1014.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Claims Administration and Objections,,14,397.5,314683.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Creditor Communications,,15,21.4,18048.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,DIP Financing/Cash Collateral,,16,37.7,37983.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Employee Issues,,17,72.7,90120.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Executory Contracts and Unexpired Leases,,18,653.9,578777.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Governance, Corporate, and Securities Matters",,19,897.2,889215.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Hearings,,20,1443.1,1404242.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Insurance and Related Matters,,21,21.0,17077.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,K&E Fee and Employment Application and Objections,,22,159.0,109488.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Non-K&E Fee and Employment Application and Objections,,23,68.1,54339.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Non-Working Travel Time,,24,4.8,6072.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Official Committee Issues and Meetings,,25,1026.8,1028776.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Plan, Disclosure Statement and Confirmation",,26,3808.8,3570290.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,SOFAs and Schedules,,27,3.4,2296.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Tax Issues,,28,85.2,103090.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,U.S. Trustee Issues,,29,35.5,30204.5,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,"Use, Sale, or Lease of Property",,30,538.4,504506.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Utilities,,31,11.2,8681.0,exhibit_a_attorney_table
+160039495,1197,txsb,20-33233,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,Vendor & Supplier Matters,,32,12.1,10959.5,exhibit_a_attorney_table

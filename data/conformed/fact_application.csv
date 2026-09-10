@@ -48,3 +48,17 @@ docket_entry_id,case_primary_key,court_id,docket_number,document_number,filer_no
 28694383,1077,txsb,16-33590,1382,"Greenberg Traurig, LLP",law_firm,order,order,2016-08-05,2016-12-16,2,,,,unparsed
 28694397,1077,txsb,16-33590,1396,"Conway MacKenzie, Inc",financial_advisor,order,order,2016-08-05,2016-12-16,2,,,,unparsed
 28693922,1077,txsb,16-33590,841,,law_firm,application_interim,interim,2016-08-05,2016-08-31,239,,,,unparsed
+438007721,1029,deb,15-10458,2138,,unknown,order,order,,,4,,,,unparsed
+22886264,1029,deb,15-10458,1736,The Rosner Law Group LLC,law_firm,application_interim,final,2017-03-01,2017-03-10,10,,,,unparsed
+148719845,1201,txsb,20-33568,722,"FTI Consulting, Inc",financial_advisor,order,order,2020-07-30,2020-10-13,2,,,,unparsed
+148719850,1201,txsb,20-33568,721,Kramer Levin Naftalis & Frankel LLP,law_firm,order,order,2020-07-29,2020-10-13,2,,,,unparsed
+179693459,1220,txsb,20-35226,1565,"Alixpartners, LLP, Financial Advisor to the Official Committee of Unsecured Creditors",financial_advisor,order,order,2021-05-01,2021-07-31,2,,,,unparsed
+148567151,1195,txsb,20-33163,1341,"Alvarez & Marsal North America, LLC",financial_advisor,order,order,2020-07-14,2020-09-30,2,,,,unparsed
+148567150,1195,txsb,20-33163,1342,Womble Bond Dickinson (US) LLP,law_firm,order,order,2020-07-16,2020-09-30,2,,,,unparsed
+149061423,1184,nysb,20-22637,751,McDermott Will & Emery LLP,law_firm,application_final,final,2020-05-29,2020-06-30,465,10240.0,49.0,generic_timekeeper_table,parsed
+99312572,1070,txnb,16-31854,1949,,financial_advisor,order,order,2016-09-01,2016-11-30,10,,,,unparsed
+160039495,1197,txsb,20-33233,3333,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,law_firm,application_final,final,2020-10-01,2021-01-16,1627,8039.0,5.7,exhibit_a_attorney_table,parsed
+162359235,1197,txsb,20-33233,3521,,financial_advisor,order,order,2020-10-01,2021-02-09,3,,,,unparsed
+156398637,1197,txsb,20-33233,3123,Kirkland & Ellis LLP and Kirland & Ellis International LLP,law_firm,order,order,2020-06-28,2020-09-30,2,,,,unparsed
+162353262,1197,txsb,20-33233,3515,,law_firm,order,order,2020-07-13,2021-02-09,2,,,,unparsed
+162756536,1197,txsb,20-33233,3541,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,law_firm,order,order,2020-10-01,2021-01-16,2,,,,unparsed

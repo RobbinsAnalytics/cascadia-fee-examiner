@@ -8,3 +8,5 @@ deb,22-10426,331328263,,,final,,,,,,not_paired,1: no parsed order on this docket
 deb,22-10426,370663496,,,interim,,,,,,not_paired,1: no parsed order on this docket
 deb,22-10426,331337164,,"Skadden, Arps, Slate, Meagher & Flom LLP",final,,,,,,not_paired,1: no parsed order on this docket
 txsb,16-33590,28694298,,,final,,,,,,not_paired,3: filer strings do not resolve to one firm
+nysb,20-22637,149061423,,McDermott Will & Emery LLP,final,,,,,,not_paired,1: no parsed order on this docket
+txsb,20-33233,160039495,,Kirkland & Ellis LLP and Kirkland & Ellis International LLP,final,,,,,,not_paired,2: order is omnibus

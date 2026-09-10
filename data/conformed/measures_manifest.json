@@ -1,5 +1,5 @@
 {
-  "built_utc": "2026-09-09T22:23:34+00:00",
+  "built_utc": "2026-09-10T00:49:12+00:00",
   "spine_as_of_date": "2023-01-12",
   "corpus_retrieved": "per document; see data/raw/recap/manifest.csv",
   "measures": {
@@ -18,18 +18,18 @@
         "document_reach_rate"
       ],
       "cases_in_population": 216,
-      "cases_searched": 33,
-      "cases_complete_enumeration": 29,
-      "cases_truncated": 4,
-      "cases_with_any_stored_document": 15,
-      "case_reach_rate": "0.4545",
-      "document_reach_rate": "0.0250"
+      "cases_searched": 48,
+      "cases_complete_enumeration": 42,
+      "cases_truncated": 6,
+      "cases_with_any_stored_document": 22,
+      "case_reach_rate": "0.4583",
+      "document_reach_rate": "0.0222"
     },
     "_scope": {
       "rule": "law-firm, single-period interim applications",
       "in_scope": 3,
       "excluded_by_type": {
-        "final": 5,
+        "final": 7,
         "amended": 0,
         "order": 0
       }

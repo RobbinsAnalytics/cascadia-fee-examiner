@@ -1,12 +1,12 @@
 {
   "script": "src/pull_fee_applications.py",
-  "started_utc": "2026-09-09T22:11:55+00:00",
-  "finished_utc": "2026-09-09T22:14:10+00:00",
-  "requests_used": 12,
-  "request_ceiling": 12,
-  "cases_searched_this_run": 1,
-  "documents_stored_this_run": 7,
-  "cases_searched_total": 25,
+  "started_utc": "2026-09-09T22:43:29+00:00",
+  "finished_utc": "2026-09-10T00:48:17+00:00",
+  "requests_used": 91,
+  "request_ceiling": 3000,
+  "cases_searched_this_run": 15,
+  "documents_stored_this_run": 14,
+  "cases_searched_total": 48,
   "cases_in_spine": 216,
-  "status": "stopped: per-run request ceiling of 12 reached"
+  "status": "stopped: rate window clears in 3605s; stopping rather than idling"
 }
