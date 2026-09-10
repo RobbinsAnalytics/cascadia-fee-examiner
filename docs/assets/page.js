@@ -181,7 +181,14 @@
       xAxis: { type: 'value', name: opts.units, nameLocation: 'middle',
                nameGap: L.narrow ? 36 : 28, min: 0, max: opts.max,
                splitNumber: L.narrow ? 3 : 5,
-               axisLabel: { formatter: function (v) {
+               // K1: the axis must state its own bound. ECharts' automatic
+               // 'nice' tick rounding drops the max as a labelled tick at
+               // some widths (Chart 1 read "0/30/60/90" at 320px with no
+               // "100", Chart 2 similarly lost its "22" -- both found by a
+               // reading panel looking at the actual render, not by any
+               // mechanical check). showMaxLabel forces the declared bound
+               // to always render, regardless of what the rounding picks.
+               axisLabel: { showMaxLabel: true, formatter: function (v) {
                  return opts.axisFormat ? opts.axisFormat(v) : nf(v);
                } } },
       yAxis: { type: 'category', inverse: !!opts.inverse,
@@ -235,9 +242,14 @@
     // Same measured-not-guessed row height as barChart() -- every category
     // here carries an explicit '\n(n=X)' line, same as Chart 1's, and the
     // same overlap defect would recur here without it.
+    // READING-PANEL FINDING #5, 2 seats: the row label's bare "(n=X)" reused
+    // the same digit the title uses for "3 applications", with two different
+    // referents. Disambiguated below to "(X of N filings)"; measured here
+    // against that same string so row height never drifts from what's drawn.
     var maxLines = rows.reduce(function (m, r) {
-      return Math.max(m, categoryLines(r.label + '\n(n=' + nf(r.n) + ')',
-                                       L.labelWidth));
+      return Math.max(m, categoryLines(
+        r.label + '\n(' + nf(r.n) + ' of ' + nf(opts.nApplications) + ' filings)',
+        L.labelWidth));
     }, 1);
     var perRow = Math.max(34, maxLines * 16 + 10);
     host.style.height =
@@ -269,7 +281,8 @@
                axisLabel: { formatter: function (v) { return v + '%'; } } },
       yAxis: { type: 'category', inverse: true,
                data: rows.map(function (r) {
-                 return r.label + '\n(n=' + nf(r.n) + ')';
+                 return r.label + '\n(' + nf(r.n) + ' of ' +
+                        nf(opts.nApplications) + ' filings)';
                }),
                axisLabel: { width: L.labelWidth, overflow: 'break',
                             lineHeight: 15, verticalAlign: 'middle',
@@ -287,12 +300,12 @@
           data: rows.map(function (r) { return r.hours; }),
           label: { show: true, position: 'right', fontFamily: SANS,
                    fontSize: 12, color: INK.evergreen,
-                   formatter: function (p) { return p.value.toFixed(1) + '%'; } } },
+                   formatter: function (p) { return 'Hours ' + p.value.toFixed(1) + '%'; } } },
         { name: 'Fees share', type: 'bar', itemStyle: { color: C.glacier },
           data: rows.map(function (r) { return r.fees; }),
           label: { show: true, position: 'right', fontFamily: SANS,
                    fontSize: 12, color: INK.glacier,
-                   formatter: function (p) { return p.value.toFixed(1) + '%'; } } }
+                   formatter: function (p) { return 'Fees ' + p.value.toFixed(1) + '%'; } } }
       ]
     });
     cascadiaResize(host, ch);
@@ -308,7 +321,12 @@
     var d = D.c1, rows = d.courts.slice();
     var deb = rows.filter(function (r) { return r.court === 'deb'; })[0];
     var best = rows.slice().sort(function (a, b) { return b.reach - a.reach; })[0];
-    var finding = 'Among ' + nf(d.searched) + ' cases searched, reach runs from ' +
+    // READING-PANEL FINDING #1, 2026-09-10 (4 seats, unprompted): "48" never
+    // appeared against its own denominator anywhere the panel could see --
+    // every seat asked how many total cases exist. Stated in the title now,
+    // not only in page prose a chart-card crop would not include.
+    var finding = 'Among ' + nf(d.searched) + ' of ' + nf(d.population) +
+      ' Appendix B-era cases searched so far, reach runs from ' +
       Math.round(rows[0].reach) + '% to ' + Math.round(best.reach) +
       '% depending on the court' + (deb ? ', and the largest, Delaware, sits at ' +
       Math.round(deb.reach) + '%' : '');
@@ -316,8 +334,13 @@
       'fee application or order, by court. Every bar states how many cases ' +
       'that court contributed.';
     barChart('c1', {
+      // FINDING #7, one seat: "deb" never gets spelled out as Delaware
+      // anywhere the panel could see, only in the title's own prose -- the
+      // court code itself is what appears on the axis in the same crop.
+      // Named directly on the one row a reader is most likely to look up.
       rows: rows.map(function (r) {
-        return { label: r.court, n: r.cases, value: r.reach };
+        return { label: r.court === 'deb' ? 'deb — Delaware' : r.court,
+                 n: r.cases, value: r.reach };
       }),
       // 100 is a true mathematical ceiling on a reach RATE (it cannot exceed
       // 100% by construction), not a guess at where this build's numbers
@@ -369,11 +392,18 @@
       tooltip: function (r) { return r.label + ': ' + nf(r.n) + ' of ' + d.total; },
       provenance: { source: 'ABA UTBMS 1997; U.S. Trustee Appendix B (78 FR 36248)',
                     asOf: 'both vocabularies fixed by publication', flags: 'no adjustments' },
+      // READING-PANEL FINDING #6, two seats: "I looked for the actual
+      // category names... and it's not on the chart itself." The names for
+      // the 'none' bucket were already in the surrounding page prose, but
+      // that prose sits outside the chart-card crop a reader (or a panel
+      // seat) may see in isolation. Named here too, in the one place
+      // guaranteed to travel with the chart.
       summary: 'Bar chart, four categories: exact match, renamed only, broader in ' +
         'Appendix B, and no UTBMS counterpart. ' + rows.map(function (r) {
           return r.n + ' ' + r.label.toLowerCase();
-        }).join('; ') + '. No trend is implied — this is a one-time classification ' +
-        'of a fixed vocabulary, not a series over time.',
+        }).join('; ') + '. The ' + d.counts.none + ' with no counterpart are ' +
+        d.noneCategories.join(', ') + '. No trend is implied — this is a ' +
+        'one-time classification of a fixed vocabulary, not a series over time.',
       ariaLabel: 'Bar chart: task-vocabulary crosswalk by match type, four categories.'
     });
   })();
@@ -397,9 +427,23 @@
       tooltip: function (r) { return r.label + ': ' + nf(r.value) + ' of ' + d.total; },
       provenance: { source: 'Bankruptcy Research Database; RECAP docket captions',
                     asOf: 'as resolved in this build', flags: 'no adjustments' },
+      // READING-PANEL FINDING #2, 4 seats, all independently asked "what are
+      // the 16 reasons." Checked against the data: they are not 16 reasons.
+      // Every unresolved pair carries the IDENTICAL templated sentence -- one
+      // shared stated mechanism, not a per-case diagnosis. The previous
+      // summary here claimed each pair "carries its own stated reason",
+      // which overclaimed a distinctiveness the data does not have; this is
+      // a correctness fix to this chart's own copy, not only a response to
+      // the panel's question. d.reasonsUniform is computed at build time so
+      // this sentence cannot drift from the underlying data again.
       summary: 'Bar chart, two categories. ' + d.resolved + ' pairs resolved (' + pct +
-        '%), ' + d.unresolved + ' unresolved. Each unresolved pair carries its own ' +
-        'stated reason in the data table rather than a single aggregate explanation.',
+        '%), ' + d.unresolved + ' unresolved. ' + (d.reasonsUniform
+          ? 'Every unresolved pair is published against the SAME stated ' +
+            'mechanism -- the subset rule did not match -- not a distinct ' +
+            'diagnosis per pair; which specific token mismatch caused each ' +
+            'one is not yet classified.'
+          : 'Each unresolved pair carries its own stated reason in the ' +
+            'data table.'),
       ariaLabel: 'Bar chart: firm-identity resolution outcome, resolved versus unresolved.'
     });
   })();
@@ -416,22 +460,26 @@
                hours: r.hoursShare, fees: r.feesShare };
     });
     pairedBarChart('c4', {
-      rows: rows, baseHeight: 210,
-      finding: 'Partners bill ' + partner.hoursShare.toFixed(1) + '% of hours but take ' +
-        partner.feesShare.toFixed(1) + '% of fees, across just ' + d.nApplications +
-        ' applications whose filer never resolved to a named firm',
-      subtitle: 'Share of in-scope hours and fees by conformed timekeeper role. ' +
-        'n on each bar is the number of the ' + d.nApplications +
-        ' in-scope applications reporting that role — not a population figure.',
+      rows: rows, baseHeight: 210, nApplications: d.nApplications,
+      finding: 'One application\u2019s own staffing split, not a caseload pattern: ' +
+        'its partners bill ' + partner.hoursShare.toFixed(1) + '% of hours but take ' +
+        partner.feesShare.toFixed(1) + '% of fees',
+      subtitle: 'Share of in-scope hours and fees by conformed timekeeper role. One ' +
+        'application (docket vaeb 15-33896) reports its own partner, associate and ' +
+        'of-counsel split; it and two smaller filings each add paraprofessional time ' +
+        'only — the filing count on every bar states which.',
       summary: 'Paired bar chart, four roles, two series each: hours share and fees ' +
-        'share. Partner holds ' + partner.hoursShare.toFixed(1) + '% of hours and ' +
-        partner.feesShare.toFixed(1) + '% of fees; associate holds ' +
+        'share. One application, docket vaeb 15-33896, carries the partner, associate ' +
+        'and of-counsel rows: partner holds ' + partner.hoursShare.toFixed(1) +
+        '% of hours and ' + partner.feesShare.toFixed(1) + '% of fees; associate holds ' +
         assoc.hoursShare.toFixed(1) + '% and ' + assoc.feesShare.toFixed(1) +
-        '%. Fees share exceeds hours share for the more senior roles in every case shown.',
+        '%. Two smaller filings add only paraprofessional time, pooled into that row. ' +
+        'This is one filing\u2019s own internal split, not a sampled pattern across cases.',
       provenance: { source: 'Fee-application timekeeper summary exhibits',
                     asOf: 'as parsed in this build', flags: 'n=' + d.nApplications +
                     ' applications; not a population figure' },
-      ariaLabel: 'Paired bar chart: staffing mix by role, hours share and fees share.'
+      ariaLabel: 'Paired bar chart: one application\u2019s staffing split, hours share ' +
+        'and fees share by role.'
     });
   })();
 
@@ -461,7 +509,14 @@
                     flags: 'paired: ' + d.paired + ' of ' + d.total },
       summary: 'Bar chart, three reasons no pairing was made: ' + rows.map(function (r) {
         return nf(r.n) + ' — ' + r.label.toLowerCase();
-      }).join('; ') + '. Zero of ' + d.total + ' applications were successfully paired.',
+      }).join('; ') + '. Zero of ' + d.total + ' applications were successfully paired. ' +
+        'For the ' + nf(d.orderGap.applications) + ' with no parsed order: order-shaped ' +
+        'docket entries were found and correctly classified on ' +
+        nf(d.orderGap.docketsWithOrderSeen) + ' of the underlying ' +
+        nf(d.orderGap.dockets) + ' dockets (' + nf(d.orderGap.orderEntriesSeen) +
+        ' entries seen in total) — so this is not a parser miss. Every one of those ' +
+        'entries is marked unavailable in RECAP: no PDF has been uploaded, the same ' +
+        'coverage gap Chart 1 measures directly.',
       ariaLabel: 'Bar chart: applications not paired with an order, by blocking rule.'
     });
   })();

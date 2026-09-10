@@ -28,6 +28,7 @@ import hashlib
 import html
 import json
 import pathlib
+import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 CONF = REPO / "data" / "conformed"
@@ -104,10 +105,24 @@ def crosswalk_facts(health):
             "tally %s -- one of the two artifacts has drifted" % (counts, check)
         )
     none_rows = [r for r in rows if r["match_type"] == "none"]
+    # READING-PANEL FINDING #6, 2 seats ("I'd need the data table to know if
+    # the 'no counterpart' ones are trivial..."; "I looked for the actual
+    # category names on each bar or in a table"). Checked against the page
+    # actually shipped, not the source CSV: the table this build put on the
+    # page carried only bucket counts (the same numbers the chart already
+    # shows), never the 22 category names -- so the finding was correct
+    # about the shipped artifact. Every category name is available in
+    # crosswalk_task_codes.csv and is exposed here for the page's table.
+    order = {"exact": 0, "rename": 1, "broader": 2, "none": 3}
+    categories = sorted(
+        [{"name": r["ustp_category"], "matchType": r["match_type"]} for r in rows],
+        key=lambda c: (order.get(c["matchType"], 9), c["name"]),
+    )
     return {
         "total": len(rows),
         "counts": counts,
         "none_categories": [r["ustp_category"] for r in none_rows],
+        "categories": categories,
         "the_one": health["codebook"]["the_one"][0],
         "claim_holds": health["codebook"]["notice_claim_all_but_one_holds"],
     }
@@ -137,6 +152,33 @@ def firm_resolution_facts(health):
     # value (person-name-control.md). unresolved_firms.csv's own columns are
     # caption-derived firm strings and candidate BRD names, both organisations.
     examples = sorted(unresolved, key=lambda r: -int(r["documents"]))[:3]
+
+    # READING-PANEL FINDING #2, 2026-09-10 (4 seats, all independently asked
+    # "what are the 16 reasons"). Checked directly: they are not 16 reasons.
+    # Every unresolved row carries the IDENTICAL templated sentence -- one
+    # stated mechanism (the subset rule did not match), applied uniformly,
+    # not a per-case diagnosis. The chart's own summary previously claimed
+    # each pair "carries its own stated reason", which overclaimed
+    # distinctiveness the data does not have; corrected in page.js. This
+    # check keeps that correction honest if the resolver ever starts
+    # producing genuinely distinct reasons.
+    distinct_reasons = {r["reason"] for r in unresolved}
+    reasons_are_uniform = (len(distinct_reasons) == 1)
+    # READING-PANEL FINDING #12, 1 seat ("no confidence tiering on the
+    # resolved 9 -- a token-subset match can still be a false positive").
+    # Checked directly: match_rule is "token_subset" for all 9 resolved
+    # pairs, uniformly -- there is no tiering *in the data* to surface, the
+    # same shape as finding #2's "16 reasons" turning out to be one reason.
+    # What IS available and was NOT on the page before this fix is the
+    # actual matched_tokens per pair, which lets a reader judge each match
+    # on its own evidence instead of trusting an aggregate count.
+    match_rules = {r["match_rule"] for r in bridge}
+    rules_are_uniform = (len(match_rules) == 1)
+    resolved_detail = [
+        {"firm": r["brd_name"], "caption": r["caption_name"],
+         "matchedTokens": r["matched_tokens"]}
+        for r in sorted(bridge, key=lambda r: r["brd_name"])
+    ]
     return {
         "resolved": resolved_pairs,
         "unresolved": unresolved_pairs,
@@ -146,6 +188,11 @@ def firm_resolution_facts(health):
         "examples": [
             {"name": r["caption_name"], "reason": r["reason"]} for r in examples
         ],
+        "reasons_are_uniform": reasons_are_uniform,
+        "single_reason_text": next(iter(distinct_reasons)) if reasons_are_uniform else "",
+        "distinct_reason_count": len(distinct_reasons),
+        "resolved_pairs": resolved_detail,
+        "rules_are_uniform": rules_are_uniform,
     }
 
 
@@ -188,6 +235,37 @@ def staffing_facts():
     resolved_dockets = {(r["court_id"], r["docket_number"]) for r in bridge}
     same_docket_resolves = sorted(dockets & resolved_dockets)
 
+    # FINDING FROM THE READING PANEL, 2026-09-10 (Seat 1: "is it the same one
+    # application driving both the partner and associate bars, or three
+    # different ones each contributing a single role?"). Checked directly
+    # against fact_role_summary.csv rather than assumed from m02's aggregate
+    # `applications` column, which cannot distinguish the two cases: partner,
+    # associate and of_counsel turn out to come from the SAME ONE document
+    # (a single application's own internal role breakdown); only
+    # paraprofessional is a genuine pool across all three in-scope documents.
+    # This is a materially different and more specific finding than "a
+    # staffing mix across 3 applications," and the chart's own title is
+    # revised to say the truer thing (see page.js Chart 4).
+    role_rows = read_csv("fact_role_summary.csv")
+    scope_ids = {r["docket_entry_id"] for r in scope}
+    entry_ids_per_role = {}
+    for r in role_rows:
+        if r["docket_entry_id"] in scope_ids:
+            entry_ids_per_role.setdefault(r["role"], set()).add(r["docket_entry_id"])
+    non_para_entries = set()
+    for role in ("partner", "associate", "of_counsel"):
+        non_para_entries |= entry_ids_per_role.get(role, set())
+    single_document_roles = (len(non_para_entries) == 1)
+    if not single_document_roles:
+        raise SystemExit(
+            "staffing_facts: expected partner/associate/of_counsel to trace "
+            "to a single document (the panel's confirmed finding); found %d "
+            "distinct source documents -- the corpus has changed and Chart "
+            "4's 'one application' framing must be re-checked before reuse."
+            % len(non_para_entries)
+        )
+    para_entries = entry_ids_per_role.get("paraprofessional", set())
+
     by_role = {r["role"]: r for r in m02}
     total_hours = sum(float(r["hours"]) for r in m02)
     total_fees = sum(float(r["fees"]) for r in m02)
@@ -200,6 +278,84 @@ def staffing_facts():
         "example_docket": same_docket_resolves[0] if same_docket_resolves else None,
         "partner": by_role["partner"],
         "associate": by_role["associate"],
+        "single_document_roles": single_document_roles,
+        "para_document_count": len(para_entries),
+    }
+
+
+def order_gap_facts():
+    """Chart 5, reading-panel finding #4 (2026-09-10, three seats): for the
+    applications not paired because "no parsed order on this docket", is
+    that a timing gap (no order exists yet) or a parser gap (an order exists
+    and the parser missed it)?
+
+    Answered by re-applying the SAME classifier rules used at acquisition
+    (never a second, informal reading) to the cached search results for
+    those dockets, and checking RECAP's own `is_available` flag on every
+    entry the rules classify as an order. This is neither "the order does
+    not exist" nor "the parser missed it" -- every order-shaped entry found
+    is marked unavailable in RECAP, meaning the court docket carries the
+    entry (RECAP mirrors PACER's public docket sheet for free) but nobody
+    has purchased and uploaded the PDF. That is the SAME coverage mechanism
+    M-04 already measures for applications, now confirmed for orders too.
+    """
+    import hashlib
+    sys.path.insert(0, str(REPO / "src"))
+    from pull_fee_applications import CLASSIFIER, load_rules, classify
+
+    v2 = read_csv("v2_requested_vs_allowed.csv")
+    no_order = [r for r in v2 if r["rule"] == "1: no parsed order on this docket"]
+    dockets = sorted({(r["court_id"], r["docket_number"]) for r in no_order})
+
+    entry_rules = load_rules(CLASSIFIER)
+    cache_dir = REPO / "data" / "live" / "cache"
+    seen = available = dockets_with_order_entry = 0
+    for court, docket in dockets:
+        q = (f'court_id:{court} AND docketNumber:"{docket}" AND '
+             f'("application for compensation" OR "fee application")')
+        key = hashlib.md5(q.encode("utf-8")).hexdigest()
+        p = cache_dir / (key + ".json")
+        if not p.exists():
+            continue
+        results = json.loads(p.read_text(encoding="utf-8")).get("results", [])
+        seen_keys, docket_has_order = set(), False
+        for r in results:
+            k = (r.get("docket_entry_id"), r.get("attachment_number"))
+            if k in seen_keys:
+                continue
+            seen_keys.add(k)
+            if classify(r.get("description", ""), entry_rules, "entry_class") == "order":
+                seen += 1
+                docket_has_order = True
+                if r.get("is_available"):
+                    available += 1
+        if docket_has_order:
+            dockets_with_order_entry += 1
+
+    return {
+        "applications": len(no_order),
+        "dockets": len(dockets),
+        "dockets_with_order_seen": dockets_with_order_entry,
+        "order_entries_seen": seen,
+        "order_entries_available": available,
+    }
+
+
+def funnel_facts(health):
+    """Cross-chart context (reading-panel finding #11, one seat, but a real
+    gap): how the population sizes named on different charts relate. 48
+    (Chart 1's denominator), 63, 25 and 11 are four different countable
+    things at four different filtering stages of the same corpus, not four
+    independent samples -- stated once, in one place, rather than left for a
+    reader to reconstruct.
+    """
+    return {
+        "population": health["frozen_spine"]["appendix_b_era_cases"],
+        "searched": health["acquisition"]["cases_searched"],
+        "documents_stored": health["acquisition"]["documents_stored"],
+        "caption_firm_pairs": health["resolution"]["caption_firm_pairs"],
+        "parsed": health["parse"]["parsed"],
+        "v2_considered": health["reconciliation_V2"]["applications_considered"],
     }
 
 
@@ -257,6 +413,8 @@ def main():
     fr = firm_resolution_facts(health)
     st = staffing_facts()
     rc = reconciliation_facts(health)
+    og = order_gap_facts()
+    fn = funnel_facts(health)
 
     data = {
         "asOfSpine": health["frozen_spine"]["as_of_date"],
@@ -272,10 +430,13 @@ def main():
         "c2": {
             "counts": cw["counts"], "total": cw["total"],
             "noneCategories": cw["none_categories"],
+            "categories": cw["categories"],
         },
         "c3": {
             "resolved": fr["resolved"], "unresolved": fr["unresolved"],
             "total": fr["total"], "examples": fr["examples"],
+            "reasonsUniform": fr["reasons_are_uniform"],
+            "resolvedPairs": fr["resolved_pairs"],
         },
         "c4": {
             "roles": [
@@ -287,10 +448,19 @@ def main():
                 for r in st["roles"]
             ],
             "nApplications": st["n_applications"],
+            "singleDocumentRoles": st["single_document_roles"],
+            "paraDocumentCount": st["para_document_count"],
         },
         "c5": {
             "counts": rc["counts"], "total": rc["total"], "paired": rc["paired"],
+            "orderGap": {
+                "applications": og["applications"], "dockets": og["dockets"],
+                "docketsWithOrderSeen": og["dockets_with_order_seen"],
+                "orderEntriesSeen": og["order_entries_seen"],
+                "orderEntriesAvailable": og["order_entries_available"],
+            },
         },
+        "funnel": fn,
         "health": health,
     }
 
@@ -313,6 +483,7 @@ def main():
         "fr_firms": fr["distinct_firms"],
         "fr_ex1_name": fr["examples"][0]["name"],
         "fr_ex2_name": fr["examples"][1]["name"],
+        "fr_reasons_uniform": str(fr["reasons_are_uniform"]).lower(),
         "st_n": st["n_applications"],
         "st_partner_hours": round(float(st["partner"]["hours_share"]) * 100, 1),
         "st_partner_fees": round(float(st["partner"]["fees_share"]) * 100, 1),
@@ -320,11 +491,20 @@ def main():
         "st_associate_fees": round(float(st["associate"]["fees_share"]) * 100, 1),
         "st_docket_court": st["example_docket"][0] if st["example_docket"] else "",
         "st_docket_num": st["example_docket"][1] if st["example_docket"] else "",
+        "st_para_docs": st["para_document_count"],
         "rc_total": rc["total"], "rc_paired": rc["paired"],
         "rc_no_order": rc["counts"].get("1: no parsed order on this docket", 0),
         "rc_omnibus": rc["counts"].get("2: order is omnibus", 0),
         "rc_unresolved": rc["counts"].get(
             "3: filer strings do not resolve to one firm", 0),
+        "og_dockets": og["dockets"],
+        "og_dockets_with_order_seen": og["dockets_with_order_seen"],
+        "og_entries_seen": og["order_entries_seen"],
+        "og_entries_available": og["order_entries_available"],
+        "fn_population": fmt(fn["population"]), "fn_searched": fmt(fn["searched"]),
+        "fn_documents_stored": fmt(fn["documents_stored"]),
+        "fn_caption_pairs": fmt(fn["caption_firm_pairs"]),
+        "fn_parsed": fmt(fn["parsed"]), "fn_v2": fmt(fn["v2_considered"]),
         "gates_passed": str(health["all_gates_passed"]).lower(),
         "generated": health["generated_utc"].replace("T", " ").replace(
             "+00:00", " UTC"),
@@ -354,16 +534,21 @@ def render(data, f, health):
          for r in data["c1"]["courts"]],
     )
     t2 = table(
-        "tbl-c2", "Chart 2 data — task-vocabulary crosswalk by match type",
-        ["Match type", "Categories"],
-        [[k, fmt(v)] for k, v in sorted(data["c2"]["counts"].items(),
-                                        key=lambda kv: -kv[1])],
+        "tbl-c2", "Chart 2 data — every U.S. Trustee category, by match type",
+        ["U.S. Trustee project category", "Match type"],
+        [[c["name"], c["matchType"].capitalize()] for c in data["c2"]["categories"]],
     )
     t3 = table(
         "tbl-c3", "Chart 3 data — firm-identity resolution",
         ["Outcome", "Caption/firm pairs"],
         [["Resolved by a stated rule", fmt(data["c3"]["resolved"])],
          ["Unresolved, published with a reason", fmt(data["c3"]["unresolved"])]],
+    )
+    t3b = table(
+        "tbl-c3-detail", "Chart 3 detail — the 9 resolved pairs, by matched tokens",
+        ["Database firm", "Docket caption string", "Matched on"],
+        [[p["firm"], p["caption"], p["matchedTokens"]]
+         for p in data["c3"]["resolvedPairs"]],
     )
     t4 = table(
         "tbl-c4", "Chart 4 data — staffing mix, hours and fees share by role",
@@ -384,7 +569,7 @@ def render(data, f, health):
 
     subs = {
         "data": json.dumps(data, separators=(",", ":")),
-        "t1": t1, "t2": t2, "t3": t3, "t4": t4, "t5": t5,
+        "t1": t1, "t2": t2, "t3": t3, "t3b": t3b, "t4": t4, "t5": t5,
         "v_css": asset_v("cascadia.css"),
         "v_echarts": asset_v("echarts.min.js"),
         "v_cascadia_echarts_theme": asset_v("cascadia-echarts-theme.js"),
@@ -525,7 +710,7 @@ than counted as complete.</p>
   </div>
 </div>
 
-<h2>Coverage varies by forum, and the largest court is the least reached</h2>
+<h2>Coverage varies by forum, and Delaware — the largest court in the population — is the least reached</h2>
 <div class="chart-card">
   <div id="c1" class="chart" style="height:420px"></div>
   <p id="sum-c1" class="chart-summary"></p>
@@ -535,10 +720,11 @@ than counted as complete.</p>
 <div class="governance-note">
 <strong>"Not yet searched" and "not covered" are different claims</strong>, and this chart
 carries only the first: every bar is a court that has been searched, and its reach is the
-share of its cases with at least one retrievable document. @@no_docket@@ searched cases
-returned no docket in the archive at all. The documents are public at the claims agents'
-own sites, which prohibit automated retrieval — this measures what is reachable by the one
-permitted method, RECAP, and that is the honest scope of the claim.
+share of its cases with at least one retrievable document, out of @@population@@ cases in
+the population overall. @@no_docket@@ searched cases returned no docket in the archive at
+all. The documents are public at the claims agents' own sites, which prohibit automated
+retrieval — this measures what is reachable by the one permitted method, RECAP, and that is
+the honest scope of the claim.
 </div>
 
 <h2>Two vocabularies for the same billing categories, and one has no counterpart</h2>
@@ -561,6 +747,7 @@ one.</strong> This build tested that claim rather than repeating it: the one is
   <div id="c3" class="chart" style="height:280px"></div>
   <p id="sum-c3" class="chart-summary"></p>
   <details class="data-table"><summary>Chart 3 data table</summary>@@t3@@</details>
+  <details class="data-table"><summary>Chart 3 detail — the 9 resolved pairs</summary>@@t3b@@</details>
 </div>
 
 <div class="governance-note">
@@ -568,27 +755,34 @@ one.</strong> This build tested that claim rather than repeating it: the one is
 data is clean.</strong> The rule matches when the database's short editorial name is a
 token subset of the docket caption's full name — never a similarity score, never a single
 shared token unless it is unique in that docket. The @@fr_unresolved@@ pairs that do not
-match are published with the specific reason each failed, most often because the database
-records only the lead firm and the docket names a co-counsel, local, or conflicts firm the
-database never recorded — e.g. <strong>@@fr_ex1_name@@</strong> and
-<strong>@@fr_ex2_name@@</strong>.
+match are published rather than dropped — but they share <strong>one stated mechanism, not
+sixteen distinct diagnoses</strong>: the subset rule did not match, most often because the
+database records only the lead firm and the docket names a co-counsel, local, or conflicts
+firm the database never recorded — e.g. <strong>@@fr_ex1_name@@</strong> and
+<strong>@@fr_ex2_name@@</strong>. Telling those 16 apart by their actual cause (an
+abbreviation mismatch versus a genuinely unrecorded firm, say) is not yet built; recorded as
+a build-forward candidate for the resolver itself, not answered by this chart.
 </div>
 
-<h2>Three applications, and the document behind them names no firm</h2>
+<h2>One application's own staffing split, plus two smaller filings that add only paraprofessional time</h2>
 <div class="chart-card">
-  <div id="c4" class="chart" style="height:340px"></div>
+  <div id="c4" class="chart" style="height:360px"></div>
   <p id="sum-c4" class="chart-summary"></p>
   <details class="data-table"><summary>Chart 4 data table</summary>@@t4@@</details>
 </div>
 
 <div class="governance-note">
-<strong>This is a staffing mix within @@st_n@@ applications, not within the population, and
-none of the three carries an extracted firm name.</strong> That is not a resolution
-failure across the board: a different filing on the same docket
-(@@st_docket_court@@ @@st_docket_num@@) resolved cleanly to a named firm — it is these three
-specific documents whose caption text did not match the extraction pattern, and the honest
-reading is a per-document gap, not a per-docket one. Read this chart against the coverage
-figures above, never as a claim about the population.
+<strong>This is not a staffing mix across @@st_n@@ applications — a reading panel asked the
+right question and the answer changes the chart.</strong> Partner, associate and of-counsel
+hours all come from the <strong>same single document</strong>; the other two in-scope
+filings contribute only a paraprofessional line each, pooled into the paraprofessional bar
+(@@st_para_docs@@ documents). So the partner/associate/of-counsel split is one application's
+own internal role breakdown, not a pattern observed across a sample — and none of the
+@@st_n@@ documents carries an extracted firm name. That is not a resolution failure across
+the board: a different filing on the same docket (@@st_docket_court@@ @@st_docket_num@@)
+resolved cleanly to a named firm — it is these specific documents whose caption text did not
+match the extraction pattern. Read this chart against the coverage figures above, never as a
+claim about the population.
 </div>
 
 <h2>Zero of eleven applications could be checked against what the court allowed</h2>
@@ -604,6 +798,25 @@ the court's fee order, written by a different author than the application it res
 An omnibus order publishes no single allowed figure by design: several professionals'
 awards in one order cannot be attributed without a rule this module has not written, so the
 award count is published and the amount is left blank rather than summed or guessed.
+<br><br>
+<strong>The largest bar is neither a timing gap nor a parser miss — a reading panel asked
+which, and the corpus can answer.</strong> Across the @@og_dockets@@ dockets behind the "no
+parsed order" applications, the classifier found @@og_entries_seen@@ order-shaped docket
+entries on @@og_dockets_with_order_seen@@ of them — the orders exist and were correctly
+identified. Every one of those @@og_entries_seen@@ entries is marked unavailable in RECAP:
+the court docket carries the entry, but nobody has purchased and uploaded the PDF. This is
+the same coverage mechanism Chart 1 measures for applications, confirmed here for orders.
+</div>
+
+<div class="governance-note">
+<strong>How the population sizes on this page relate, stated once rather than left for a
+reader to reconstruct.</strong> @@fn_population@@ cases make up the population;
+@@fn_searched@@ have been searched so far (Chart 1); @@fn_documents_stored@@ documents have
+been retrieved from those searches, among which @@fn_caption_pairs@@ distinct caption-firm
+pairs were seen (Chart 3) and @@fn_parsed@@ documents were successfully parsed;
+@@fn_v2@@ parsed applications had a matching docket to attempt a court-order pairing against
+(Chart 5). Each number is a different filtering stage of the same corpus, not an independent
+sample — a case counted in one is not guaranteed to appear in another.
 </div>
 
 <h2>How it stays right</h2>
