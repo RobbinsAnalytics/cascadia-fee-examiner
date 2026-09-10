@@ -578,6 +578,31 @@ neither K5/K6/K7/K8 nor the `SystemExit` unsubstituted-token guard would
 have caught any of the specific defects fixed here either. `validate.py` and
 `validate_freeze.py` both pass against the updated `docs/` tree.
 
-**Not merged, not published, not deployed.** This file, and the fixes it
-records, sit on `build/fee-examiner-frontend`, unmerged, pending Aaron's own
-look at the rendering and his explicit instruction to go live.
+**Aaron read the rendering directly and gave two further rounds of notes,
+neither from the panel.** Round 2: Chart 1's court codes (only Delaware had
+been named) were unreadable to a reader who doesn't already know bankruptcy
+court abbreviations — every court now carries its real name, joined from a
+new `court_name` column on `data/reference/dim_court.csv`. Charts 2, 3 and 5
+scaled their axis to the full category/pair/application count rather than
+the tallest bar, leaving most of the plot empty — all three now scale to
+their own tallest bar plus headroom, the same discipline Chart 1 and Chart 4
+already used. Fixing that exposed a narrow-width tick-crowding defect no one
+had flagged, caught on the same by-eye inspection this file's §2 already
+argues for. Round 3: Aaron asked for the court **code** to be dropped from
+Chart 1 entirely, name only — done.
+
+**Aaron then said, in words: "Make that update, then publish."** That is
+the explicit go-live instruction this file and the relay brief both gated
+on — not inferred from a fix looking right, stated directly. This session
+is merging `build/fee-examiner-frontend` into `main` and pushing to `origin`
+as the direct result.
+
+**What "publish" does not yet reach.** B3 of the relay brief found no live
+trigger on this repo at all — no GitHub Pages, no CI workflow, no `gh-pages`
+branch, no deploy script (`gh api repos/RobbinsAnalytics/cascadia-fee-examiner/pages`
+returned 404). Merging and pushing puts the finished page on `main` at
+GitHub; it does not, by itself, make the page reachable at a URL, because no
+such mechanism has been provisioned. Standing up one (enabling Pages,
+choosing a domain, adding a workflow) is a separate infrastructure decision
+this session has not made and is flagging back to Aaron rather than
+assuming.

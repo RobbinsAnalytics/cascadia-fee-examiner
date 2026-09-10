@@ -341,13 +341,13 @@
       'fee application or order, by court. Every bar states how many cases ' +
       'that court contributed.';
     barChart('c1', {
-      // FINDING #7 (one seat) named only "deb" as Delaware. Aaron's own
-      // direct read of that fix, round 2: naming Delaware alone left every
-      // other row an opaque code ("what is txnb vs txsb?"). Every court
-      // now carries its real name, from dim_court.csv via courtName below
-      // -- not a special case for the one court a seat happened to flag.
+      // FINDING #7 (one seat) named only "deb" as Delaware; round 2 named
+      // every court but kept the code alongside the name. Aaron, round 3:
+      // drop the code entirely, name only. The court_id is still the join
+      // key in the underlying data table -- this is a display-label change,
+      // not a data change.
       rows: rows.map(function (r) {
-        return { label: r.court + ' — ' + r.courtName, n: r.cases, value: r.reach };
+        return { label: r.courtName, n: r.cases, value: r.reach };
       }),
       // 100 is a true mathematical ceiling on a reach RATE (it cannot exceed
       // 100% by construction), not a guess at where this build's numbers
