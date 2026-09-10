@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-09T22:24:15+00:00",
+  "generated_utc": "2026-09-10T00:49:45+00:00",
   "module": "cascadia-fee-examiner",
   "frozen_spine": {
     "as_of_date": "2023-01-12",
@@ -33,45 +33,45 @@
   },
   "acquisition": {
     "cases_in_population": 216,
-    "cases_searched": 33,
-    "cases_not_yet_searched": 183,
-    "cases_truncated": 4,
-    "documents_stored": 49,
-    "last_run_status": "stopped: per-run request ceiling of 12 reached",
-    "last_run_requests": 12,
-    "unique_docket_entries_classified": 2331,
-    "unclassified_rate": 0.023166023166023165,
+    "cases_searched": 48,
+    "cases_not_yet_searched": 168,
+    "cases_truncated": 6,
+    "documents_stored": 63,
+    "last_run_status": "stopped: rate window clears in 3605s; stopping rather than idling",
+    "last_run_requests": 91,
+    "unique_docket_entries_classified": 3667,
+    "unclassified_rate": 0.02617943823288792,
     "classification": {
-      "application_interim": 800,
-      "order": 533,
-      "service": 293,
-      "application_final": 258,
-      "certification": 169,
-      "motion": 153,
-      "unclassified": 54,
-      "application_amended": 20,
-      "notice": 19,
-      "monthly_statement": 16,
-      "objection": 16
+      "application_interim": 1261,
+      "order": 827,
+      "service": 546,
+      "application_final": 390,
+      "certification": 253,
+      "motion": 182,
+      "unclassified": 96,
+      "monthly_statement": 34,
+      "application_amended": 30,
+      "notice": 29,
+      "objection": 19
     }
   },
   "coverage_M04": {
-    "case_reach_rate": "0.4545",
-    "document_reach_rate": "0.0250",
+    "case_reach_rate": "0.4583",
+    "document_reach_rate": "0.0222",
     "denominator_note": "rates are over SEARCHED cases; not-yet-searched is reported separately, not counted as uncovered"
   },
   "parse": {
-    "documents": 49,
-    "parsed": 9,
-    "parse_rate": 0.1837,
+    "documents": 63,
+    "parsed": 11,
+    "parse_rate": 0.1746,
     "by_status": {
-      "parsed": 9,
-      "unparsed": 40
+      "parsed": 11,
+      "unparsed": 52
     },
     "layout_families": {
-      "exhibit_a_attorney_table": 1,
-      "generic_timekeeper_table": 1,
-      "none": 40,
+      "exhibit_a_attorney_table": 2,
+      "generic_timekeeper_table": 2,
+      "none": 52,
       "role_subtotal_rows": 1,
       "role_summary_table": 6
     }
@@ -80,21 +80,34 @@
     "rule": "law-firm, single-period interim applications",
     "in_scope": 3,
     "excluded_by_type": {
-      "final": 5,
+      "final": 7,
       "amended": 0,
       "order": 0
     }
   },
   "resolution": {
-    "caption_firm_pairs": 16,
-    "match_rate": 0.3125,
-    "unresolved_rate": 0.6875,
+    "caption_firm_pairs": 25,
+    "match_rate": 0.36,
+    "unresolved_rate": 0.64,
     "by_rule": {
-      "token_subset": 5
+      "token_subset": 9
     },
     "single_token_matches_refused": 0,
     "overrides_used": 0,
     "unresolved_examples_file": "data/conformed/unresolved_firms.csv"
+  },
+  "reconciliation_V2": {
+    "orders_in_corpus": 21,
+    "orders_parsed": 11,
+    "orders_omnibus": 5,
+    "applications_considered": 11,
+    "paired": 0,
+    "not_paired_by_rule": {
+      "1: no parsed order on this docket": 8,
+      "2: order is omnibus": 2,
+      "3: filer strings do not resolve to one firm": 1
+    },
+    "median_cut_pct": null
   },
   "gates": {
     "validate": {
