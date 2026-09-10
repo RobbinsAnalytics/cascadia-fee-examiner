@@ -74,10 +74,28 @@ def coverage_facts(health):
         (r for r in rows if r["grouping"] == "court"),
         key=lambda r: float(r["case_reach_rate"]),
     )
+    # Chart-review round 2, Aaron directly: "I don't understand what the y
+    # axis labels are... why is Delaware the only [name] listed?" The
+    # panel-fix round named only deb, which read fine alone but left every
+    # other court opaque once Delaware alone was spelled out. Every court
+    # now gets its real name, from the same committed reference file
+    # (dim_court.csv) every other vocabulary in this build uses -- not a
+    # name invented in the chart layer. Fails closed if a court appears in
+    # this build's own coverage data with no entry in that file, rather
+    # than silently falling back to the bare code Aaron just flagged.
+    court_names = {r["court_id"]: r["court_name"] for r in read_csv("dim_court.csv", REF)}
+    missing = sorted({r["group_value"] for r in courts if r["group_value"] not in court_names})
+    if missing:
+        raise SystemExit(
+            "coverage_facts: court(s) %s appear in m04_coverage.csv with no "
+            "entry in dim_court.csv -- add the name; do not let the chart "
+            "fall back to a bare code." % missing
+        )
     acq = health["acquisition"]
     return {
         "all": all_row,
         "courts": courts,
+        "court_names": court_names,
         "population": acq["cases_in_population"],
         "searched": acq["cases_searched"],
         "not_searched": acq["cases_not_yet_searched"],
@@ -420,7 +438,9 @@ def main():
         "asOfSpine": health["frozen_spine"]["as_of_date"],
         "c1": {
             "courts": [
-                {"court": r["group_value"], "cases": int(r["cases"]),
+                {"court": r["group_value"],
+                 "courtName": cov["court_names"][r["group_value"]],
+                 "cases": int(r["cases"]),
                  "stored": int(r["cases_with_any_stored_document"]),
                  "reach": round(float(r["case_reach_rate"]) * 100, 2)}
                 for r in cov["courts"]

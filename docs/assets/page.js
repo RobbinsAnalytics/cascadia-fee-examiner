@@ -180,7 +180,14 @@
               containLabel: true },
       xAxis: { type: 'value', name: opts.units, nameLocation: 'middle',
                nameGap: L.narrow ? 36 : 28, min: 0, max: opts.max,
-               splitNumber: L.narrow ? 3 : 5,
+               // 2, not 3, at narrow width: with showMaxLabel forcing the
+               // true bound to render (below), a splitNumber of 3 on a
+               // small-count axis (Charts 2/3/5) left ECharts' own "nice"
+               // tick one step short of the forced max, so the two sat
+               // right next to each other ("9 10", "15 18") -- fewer
+               // requested ticks gives the forced max room to sit apart
+               // from the last regular one instead of crowding it.
+               splitNumber: L.narrow ? 2 : 5,
                // K1: the axis must state its own bound. ECharts' automatic
                // 'nice' tick rounding drops the max as a labelled tick at
                // some widths (Chart 1 read "0/30/60/90" at 320px with no
@@ -334,13 +341,13 @@
       'fee application or order, by court. Every bar states how many cases ' +
       'that court contributed.';
     barChart('c1', {
-      // FINDING #7, one seat: "deb" never gets spelled out as Delaware
-      // anywhere the panel could see, only in the title's own prose -- the
-      // court code itself is what appears on the axis in the same crop.
-      // Named directly on the one row a reader is most likely to look up.
+      // FINDING #7 (one seat) named only "deb" as Delaware. Aaron's own
+      // direct read of that fix, round 2: naming Delaware alone left every
+      // other row an opaque code ("what is txnb vs txsb?"). Every court
+      // now carries its real name, from dim_court.csv via courtName below
+      // -- not a special case for the one court a seat happened to flag.
       rows: rows.map(function (r) {
-        return { label: r.court === 'deb' ? 'deb — Delaware' : r.court,
-                 n: r.cases, value: r.reach };
+        return { label: r.court + ' — ' + r.courtName, n: r.cases, value: r.reach };
       }),
       // 100 is a true mathematical ceiling on a reach RATE (it cannot exceed
       // 100% by construction), not a guess at where this build's numbers
@@ -360,9 +367,9 @@
       // .label/.n on this array is exactly the property-name mismatch that
       // rendered as "undefined, n=NaN" until the render step surfaced it.
       summary: 'Ranked bar chart, one bar per court searched so far. Reach varies ' +
-        'from ' + Math.round(rows[0].reach) + '% (' + rows[0].court + ', n=' +
+        'from ' + Math.round(rows[0].reach) + '% (' + rows[0].courtName + ', n=' +
         nf(rows[0].cases) + ') to ' + Math.round(rows[rows.length - 1].reach) +
-        '% (' + rows[rows.length - 1].court + ', n=' +
+        '% (' + rows[rows.length - 1].courtName + ', n=' +
         nf(rows[rows.length - 1].cases) +
         '). No trend or sequence is implied — courts are ranked by reach, not by size or date.',
       ariaLabel: 'Ranked bar chart: coverage reach rate by court, cases searched so far.'
@@ -378,8 +385,15 @@
     var rows = order.filter(function (k) { return d.counts[k]; }).map(function (k) {
       return { label: labels[k], key: k, n: d.counts[k], value: d.counts[k] };
     });
+    // Aaron, round 2: "the x axis goes to 22, but the max number in the
+    // chart is 9" -- max: d.total (22, the full category count) is
+    // data-derived per K1, but left most of the plot empty. The axis now
+    // scales to the tallest bar plus headroom for its end label, same as
+    // Chart 1/4 already do; the "9 of 22" relationship is still stated in
+    // the title and the data table, just not spent on axis whitespace.
+    var c2Max = Math.ceil(Math.max.apply(null, rows.map(function (r) { return r.value; })) * 1.1);
     barChart('c2', {
-      rows: rows, baseHeight: 170, units: 'categories', max: d.total,
+      rows: rows, baseHeight: 170, units: 'categories', max: c2Max,
       finding: d.counts.exact + ' of the 22 U.S. Trustee project categories match ' +
         'a 1997 UTBMS task code exactly; ' + d.counts.none + ' have none at all',
       subtitle: 'Every Appendix B project category, classed by how it maps to the ' +
@@ -416,8 +430,12 @@
       { label: 'Unresolved, published with a reason', key: 'unresolved', value: d.unresolved }
     ];
     var pct = Math.round(1000 * d.resolved / d.total) / 10;
+    // Same fix as Chart 2, same Aaron note applied here too: axis scales to
+    // the tallest bar (unresolved, 16) plus label headroom, not the full
+    // 25-pair total. "9 of 25" stays in the title and the data table.
+    var c3Max = Math.ceil(Math.max.apply(null, rows.map(function (r) { return r.value; })) * 1.1);
     barChart('c3', {
-      rows: rows, baseHeight: 150, units: 'caption/firm pairs', max: d.total,
+      rows: rows, baseHeight: 150, units: 'caption/firm pairs', max: c3Max,
       finding: d.resolved + ' of ' + d.total + ' caption-to-database firm pairs ' +
         'resolve by a stated rule (' + pct + '%); every one of the rest is published, not dropped',
       subtitle: 'Every caption-derived firm string seen in a stored document, ' +
@@ -496,8 +514,13 @@
     var rows = order.filter(function (k) { return d.counts[k]; }).map(function (k) {
       return { label: labels[k] || k, n: d.counts[k], value: d.counts[k] };
     });
+    // Aaron, round 2, named this one directly: "don't need 10 and 11 on
+    // there" -- the axis ran to the 11-application total past a max bar of
+    // 8. Scales to the tallest bar plus label headroom instead, same fix as
+    // Charts 2/3; "0 of 11" stays in the title.
+    var c5Max = Math.ceil(Math.max.apply(null, rows.map(function (r) { return r.value; })) * 1.1);
     barChart('c5', {
-      rows: rows, baseHeight: 160, units: 'applications', max: d.total,
+      rows: rows, baseHeight: 160, units: 'applications', max: c5Max,
       finding: 'None of the ' + d.total + ' applications with a matching docket could ' +
         'be checked against what the court allowed',
       subtitle: 'Every parsed application, and the rule that stopped it from being ' +
