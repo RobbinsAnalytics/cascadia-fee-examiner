@@ -20,8 +20,9 @@ an intention. The rule and its mechanisms are in
 to **application × firm × role** as it reads and never writes a per-person row;
 narratives are never persisted; API responses are stripped of `attorney`,
 `party`, `assignedTo` and `referredTo` **at write time**; `dim_case` is built
-from a column allow-list; and `.githooks/schema_allowlist_gate.py` refuses any
-committed table whose header is not declared. **An eponymous firm name is not a
+from a column allow-list; and section C of `src/validate.py` refuses any
+committed table whose header is not declared in
+`governance/schema_allowlist.json` — a publish gate, not a third git hook. **An eponymous firm name is not a
 person** — "Kirkland & Ellis LLP" is a party to the filing, not a timekeeper.
 
 **2 · No telecommunications debtor is analysed.** SIC major group 48 is dropped
@@ -118,11 +119,11 @@ in this clone**, and on POSIX it is also inert unless `.githooks/pre-commit` is
 tracked `100755`. Both were done at initialisation. Run
 `python .claude/hooks/hook_test_matrix.py` to confirm the guards behave.
 
-**This repo needs an entry in `cascadia-standards/governance/hook_manifest.json`
-and cannot write one.** That entry is authored from a session rooted in
-`cascadia-standards`. Until it lands, `check_hook_drift.py` names this repo as
-undeclared estate-wide. **That is the honest signal, not breakage — do not
-"fix" it from here.**
+**This repo is declared in `cascadia-standards/governance/hook_manifest.json`**
+(2026-09-14: `lifecycle: active`, all four guard files `required`). That entry
+is authored and maintained from a session rooted in `cascadia-standards`,
+never from here; `check_hook_drift.py` is the authority on the current state
+of this repo's guards, not this file.
 
 ## Generated, not authored
 
